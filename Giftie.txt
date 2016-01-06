@@ -1,0 +1,38 @@
+Giftie -> www.giftie.com [or something]
+
+Keep a list of RECIPIENTS you buy gifts for, and the GIFTS you have bought or want to buy, including images and links for the gifts
+
+Database includes GIVERS, RECIPIENTS and GIFTS tables
+ - GIVERS includes id + gmail/facebook login info (name, email, pic)
+ - RECIPIENTS includes id + optional details (sizes, birthdate) + association to GIVER
+ - GIFTS includes id + image + desc + optional link + date entered + date purchased + status(given, purchased, idea) + association to RECIPIENT_id & GIVER_id
+
+Webpages needed
+ - Welcome/Splash (no auth needed)
+/ & /welcome
+ - Login (no auth needed)
+/login
+ - Register (no auth needed)
+/registration
+ - My_Recipients listing AND links to Add_Recipient, PLUS foreach RECIPIENT: Edit_Recipient, Recipient_Gifts, Delete_Recipient
+/recipients
+ -- Add_Recipient
+/recipients/add
+ -- Edit_Recipient
+/recipients/rec_id/edit
+ -- Delete_Recipient
+/recipients/rec_id/delete
+ - Recipient_Gifts listing with image & link & expandable desc, sort by name or status (given, purchased, ideas), link to Add_Gift, plus foreach GIFT: Change_Status, Edit_Gift, Delete_Gift
+/recipients/rec_id/gifts
+ -- Add_Gift
+/recipients/rec_id/gifts/add
+ -- Change_Status
+/recipients/rec_id/gifts/gift_id/status
+ -- Edit_Gift
+/recipients/rec_id/gifts/gift_id/edit
+ -- Delete_Gift
+/recipients/rec_id/gifts/gift_id/delete
+
+
+
+ 

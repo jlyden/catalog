@@ -1,0 +1,49 @@
+Iterative Development
+
+Test after each stage
+
+1. Mock-up designs & URLs for webpages
+ a. How many TYPES of pages?
+ b. Use pencil & paper
+
+2. Set up routing for application in Flask
+ a. Create handler.py
+	from flask import flask
+	app = Flask(__name__)
+
+	if __name__ == '__main__':
+		app.debug = True
+		app.run(host = '0.0.0.0', port = 5000)
+ b. Create methods for each URL to return test messages in browser
+	@app.route('/')
+	def showSomething():
+		return render_template('something.html', things = things)
+
+3. Build templates & forms for webpages
+ a. Create templates, including base.html, for each webpage
+ b. To avoid errors, add "fake database" as dictionaries in handler.py
+	#Fake Restaurants
+	restaurant = {'name': 'The CRUDdy Crab', 'id': '1'}
+	restaurants = [{'name': 'The CRUDdy Crab', 'id': '1'}, {'name':'Blue Burgers', 'id':'2'},{'name':'Taco Hut', 'id':'3'}]
+	#Fake Menu Items
+	items = [ {'name':'Cheese Pizza', 'description':'made with fresh cheese', 'price':'$5.99','course' :'Entree', 'id':'1'}, {'name':'Chocolate Cake','description':'made with Dutch Chocolate', 'price':'$3.99', 'course':'Dessert','id':'2'},{'name':'Caesar Salad', 'description':'with fresh organic vegetables','price':'$5.99', 'course':'Entree','id':'3'},{'name':'Iced Tea', 'description':'with lemon','price':'$.99', 'course':'Beverage','id':'4'},{'name':'Spinach Dip', 'description':'creamy dip with fresh spinach','price':'$1.99', 'course':'Appetizer','id':'5'} ]
+	item =  {'name':'Cheese Pizza','description':'made with fresh cheese','price':'$5.99','course' :'Entree'}
+ c. Leave # in <form action = '#' method = 'POST'> and <a href = '#'>
+ d. Account for "no items" case
+
+4. Code for CRUD functionality (including db setup) using SQLAlchemy
+ a. See above - set routes for GET or POST methods as needed
+ b. Add url_for and redirect when necessary
+ c. In Delete, "use POST requests and nonces to prevent CSRF"
+
+5. Add API endpoints
+ a. import jsonify, add serialize property as needed
+ b. JSON - persons/JSON, person/gifts/JSON, person/gifts/item/JSON
+ c. other API endpoint - RSS, Atom, XML
+
+6. Add styling - CSS, JavaScript, images, message flashing, etc
+ a. add files to /static folder
+ b. add message flashing for when things are created, updated, deleted
+
+7. Add security - OAuth2
+ a. https://pythonhosted.org/Flask-Security/
