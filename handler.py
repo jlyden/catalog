@@ -1,25 +1,24 @@
 # Runs Flask Application for Giftie Webpages
 # written by jennifer lyden for Udacity FullStack Nanodegree
 
-from flask import Flask
+from flask import Flask, render_template, url_for, request, redirect, flash, jsonify, make_response
+
+
 app = Flask(__name__)
 
 
 @app.route('/')
 @app.route('/welcome')
 def welcome():
-    return 'Welcome page'
-#    return render_template('welcome.html')
+    return render_template('welcome.html')
 
 @app.route('/login')
 def login():
-    return 'Login page'
-#    return render_template('login.html')
+    return render_template('login.html')
 
 @app.route('/register')
 def register():
-    return 'Registration page'
-#    return render_template('register.html')
+    return render_template('register.html')
 
 @app.route('/recipients')
 def recipients():
