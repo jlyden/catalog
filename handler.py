@@ -22,8 +22,8 @@ def register():
 
 @app.route('/recipients')
 def recipients():
-    return 'Recipients listing'
-#    return render_template('recipients.html', recipients = recipients)
+#    return 'Recipients listing'
+    return render_template('recipients.html', recipients = recipients)
 
 @app.route('/recipients/add')
 def addRecipient():
@@ -64,6 +64,15 @@ def editGift():
 def deleteGift():
     return 'Delete gift with gift_id status for recipient with rec_id'
 #    return render_template('giftDelete.html', recipient = recipient, gift = gift)
+
+
+#Fake Recipients
+recipient = {'id':'1', 'name':'Susan Whitaker', 'bday':'Jan 2', 'sizes':'small'}
+recipients = [{'id':'1', 'name':'Susan Whitaker', 'bday':'Jan 2', 'sizes':'small'}, {'id':'2', 'name':'Anne Lyden', 'bday':'Aug 30', 'sizes':'medium'}, {'id':'3', 'name':'Pepper Whitaker', 'bday':'Sept 2', 'sizes':'0-3 mo'}]
+
+#Fake Gifts
+gifts = [{'id': '1', 'recipient_id':'1', 'name':'Fiorentina Scarf', 'description':'Oversized Plaid Scarf with Fringe', 'image':'http://cdn.saleoffaccessories.com/d1/fc/d1fc1373d0e5e01ae234dd2c222b4468/la-fiorentina-plush-plaid-fringe-scarf.jpg', 'link':'http://www.amazon.com/Fiorentina-Womens-Oversized-Plaid-Fringe/dp/B00TV4CF36/ref=sr_1_7', 'status': 'idea'}, {'id': '2', 'recipient_id':'1', 'name':"What to Expect When You're Expecting", 'description':"America's pregnancy bible", 'image':"https://upload.wikimedia.org/wikipedia/en/d/d6/What_to_Expect_When_You're_Expecting_Cover.jpg", 'link':'http://www.amazon.com/What-Expect-When-Youre-Expecting/dp/0761148574/ref=sr_1_1', 'status': 'idea'}, {'id': '3', 'recipient_id':'1', 'name':'Mama Bee Belly Butter', 'description':"Burt's Bees Belly Butter, 6.5 Ounce", 'image':'http://www.allbabyforbaby.com/image/cache/data/burts-bees/burts-bees-mama-bee-belly-butter-6-5-ounce-2-500x500.jpg', 'link':'http://www.amazon.com/gp/product/B00DM14TYC/ref=s9_simh_gw_p14_d0_i5', 'status': 'idea'}, {'id': '4', 'recipient_id':'1', 'name':'Total Body Pillow', 'description':'Supports hips, back, neck, and tummy', 'image':'http://s7d9.scene7.com/is/image/BedBathandBeyond/8000415038357p', 'link':'http://www.amazon.com/gp/product/B0000635WI/ref=s9_simh_gw_p121_d0_i3', 'status': 'idea'}, {'id': '5', 'recipient_id':'1', 'name':'Baby Sling Carrier', 'description':'For babies from birth to 35 lbs', 'image':'https://images-na.ssl-images-amazon.com/images/I/41QZfy9IkAL.jpg', 'link':'http://www.amazon.com/Original--Fashion-Comfortable-Innoo-Tech/dp/B0156HL9WE/ref=sr_1_4', 'status': 'idea'}]
+gift = {'id': '1', 'recipient_id':'1', 'name':'Fiorentina Scarf', 'description':'Oversized Plaid Scarf with Fringe', 'image':'http://cdn.saleoffaccessories.com/d1/fc/d1fc1373d0e5e01ae234dd2c222b4468/la-fiorentina-plush-plaid-fringe-scarf.jpg', 'link':'http://www.amazon.com/Fiorentina-Womens-Oversized-Plaid-Fringe/dp/B00TV4CF36/ref=sr_1_7', 'status': 'idea'}
 
 
 if __name__ == '__main__':

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+  <h1>Welcome Back!</h1>
+  <h3>Here is your current recipient list. ~
+  <a href="{{url_for('addRecipient')}}">Add a recipient</a></h3>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Tools</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in recipients %}
+        <tr>
+          <td>{{r.name}}</td>
+          <td><a href="{{url_for('gifts', rec_id=r.id)}}">Gifts List</a> ||
+            <a href="{{url_for('editRecipient', rec_id=r.id)}}">Edit</a> ||
+            <a href="{{url_for('deleteRecipient', rec_id=r.id)}}">Delete</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
