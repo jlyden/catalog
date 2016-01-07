@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div>
+  <h1>Delete a recipient</h1>
+  <p>Are you sure you want to delete this recipient?</br>
+  This action cannot be undone.</p>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Birthday</th>
+        <th>Sizes</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>{{recipient.name}}</td>
+          <td>{{recipient.bday}}</td>
+          <td>{{recipient.sizes}}</td>
+        </tr>
+    </tbody>
+  </table>
+
+  <form action = "{{url_for('deleteRecipient', rec_id=recipient.id)}}" method = 'POST'>
+  <input type="submit" class="btn btn-default" value = "Delete">
+  <a class="btn btn-default" onclick="goBack()">Cancel</a>
+
+</div>
+
+{% endblock %}

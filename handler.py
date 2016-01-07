@@ -34,8 +34,7 @@ def editRecipient():
 
 @app.route('/recipients/rec_id/delete')
 def deleteRecipient():
-    return 'Delete recipient with rec_id'
-#    return render_template('recipientDelete.html', recipient = recipient)
+    return render_template('recipientDelete.html', recipient = recipient)
 
 @app.route('/recipients/rec_id/gifts')
 def gifts():
@@ -55,8 +54,7 @@ def editGift():
 
 @app.route('/recipients/rec_id/gifts/gift_id/delete')
 def deleteGift():
-    return 'Delete gift with gift_id status for recipient with rec_id'
-#    return render_template('giftDelete.html', recipient = recipient, gift = gift)
+    return render_template('giftDelete.html', recipient = recipient, gift = gift)
 
 
 #Fake Recipients
