@@ -31,10 +31,11 @@ Test after each stage
  c. Leave # in <form action = '#' method = 'POST'> and <a href = '#'>
  d. Account for "no items" case
 
-4. Code for CRUD functionality (including db setup) using SQLAlchemy
- a. See above - set routes for GET or POST methods as needed
- b. Add url_for and redirect when necessary
- c. In Delete, "use POST requests and nonces to prevent CSRF"
+4. Add CRUD functionality using SQLAlchemy
+ a. Setup database.py
+ b. Set up CRUD for methods as needed (GET or POST)
+ c. Add url_for and redirect when necessary
+ d. In Delete, "use POST requests and nonces to prevent CSRF"
 
 5. Add API endpoints
  a. import jsonify, add serialize property as needed

@@ -6,6 +6,12 @@
   <h3>Here is your current recipient list. ~
   <a href="{{url_for('addRecipient')}}">Add a recipient</a></h3>
 
+  {% if not recipients %}
+  <p>You don't have any recipients.<p>
+  <h3><a href="{{url_for('addRecipient')}}">Add one!</a></h3>
+  {% endif %}
+
+  {% if recipients %}
   <table class="table">
     <thead>
       <tr>
@@ -24,6 +30,8 @@
       {% endfor %}
     </tbody>
   </table>
+  {% endif %}
+
 </div>
 
 {% endblock %}

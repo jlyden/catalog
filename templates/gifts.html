@@ -22,6 +22,12 @@
     <div class="col-md-3"></div>
   </div>
 
+  {% if not gifts %}
+  <p>You don't have any recipients.<p>
+  <h3><a href="{{url_for('addRecipient')}}">Add one!</a></h3>
+  {% endif %}
+
+  {% if gifts %}
   <table class="table">
     <thead>
       <tr>
@@ -46,5 +52,7 @@
       {% endfor %}
     </tbody>
   </table>
+  {% endif %}
+
 </div>
 {% endblock %}
