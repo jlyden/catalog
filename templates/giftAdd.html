@@ -2,9 +2,9 @@
 {% block content %}
 
 <div>
-  <h1>Add a gift</h1>
+  <h1>Add a gift for {{ recipient.name }}</h1>
 
-  <form id="addGift" action="{{url_for('addGift')}}" method="POST">
+  <form id="addGift" action="{{url_for('addGift', rec_id = rec_id)}}" method="POST">
     <fieldset class="form-group">
       <label for="name">Name of Gift</label>
       <input type="text" class="form-control" name="name" placeholder="Plaid Scarf" size='30' required>

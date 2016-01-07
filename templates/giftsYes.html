@@ -4,7 +4,7 @@
 <div class="container">
   <h1>Welcome Back!</h1>
   <h3>Here is the gift listing for {{recipient.name}}. ~
-  <a href="{{url_for('addGift')}}">Add a gift</a></h3>
+  <a href="{{url_for('addGift', rec_id = recipient.id)}}">Add a gift</a></h3>
 
   <div class="row">
     <div class="col-md-3">
@@ -22,12 +22,6 @@
     <div class="col-md-3"></div>
   </div>
 
-  {% if not gifts %}
-  <p>You don't have any recipients.<p>
-  <h3><a href="{{url_for('addRecipient')}}">Add one!</a></h3>
-  {% endif %}
-
-  {% if gifts %}
   <table class="table">
     <thead>
       <tr>
@@ -52,7 +46,6 @@
       {% endfor %}
     </tbody>
   </table>
-  {% endif %}
 
 </div>
 {% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+  <h1>Welcome Back!</h1>
+  <h3>Here is your current gift list for {{ recipient.name }}. ~
+  <a href="{{url_for('addGift', rec_id = recipient.id)}}">Add a gift</a></h3>
+
+  <p>No gifts in the list!<p>
+  <h3><a href="{{url_for('addGift', rec_id = recipient.id)}}">Add one!</a></h3>
+
+</div>
+
+{% endblock %}
