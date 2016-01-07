@@ -1,3 +1,7 @@
+TODO -
+
+add links to return to recipient list and gift list
+
 Giftie -> www.giftie.com [or something]
 
 https://pixabay.com/static/uploads/photo/2014/04/02/17/03/present-307776_960_720.png
@@ -59,7 +63,13 @@ gifts = [{'id':'1', 'recipient_id':'1', 'name':'Fiorentina Scarf', 'description'
 'image':'http://s7d9.scene7.com/is/image/BedBathandBeyond/8000415038357p', 
 'link':'http://www.amazon.com/gp/product/B0000635WI/ref=s9_simh_gw_p121_d0_i3', 
 'status': 'idea'},
-{'id':'5', 'recipient_id':'1', 'name':'Baby Sling Carrier', 'description':'For babies from birth to 35 lbs', 'image':'https://images-na.ssl-images-amazon.com/images/I/41QZfy9IkAL.jpg', 'link':'http://www.amazon.com/Original--Fashion-Comfortable-Innoo-Tech/dp/B0156HL9WE/ref=sr_1_4', 'status': 'idea'}]
-gift = {'id': '1', recipient_id:'1', 'name':'Fiorentina Scarf', 'description':'Oversized Plaid Scarf with Fringe', 'image':'http://cdn.saleoffaccessories.com/d1/fc/d1fc1373d0e5e01ae234dd2c222b4468/la-fiorentina-plush-plaid-fringe-scarf.jpg', 'link':'http://www.amazon.com/Fiorentina-Womens-Oversized-Plaid-Fringe/dp/B00TV4CF36/ref=sr_1_7', 'status': 'idea'}
+{'id':'5', 'recipient_id':'1', 'name':'Baby Sling Carrier', 'description':'For babies from birth to 35 lbs', 
+'image':'https://images-na.ssl-images-amazon.com/images/I/41QZfy9IkAL.jpg', 
+'link':'http://www.amazon.com/Original--Fashion-Comfortable-Innoo-Tech/dp/B0156HL9WE/ref=sr_1_4', 
+'status': 'idea'}]
+gift = {'id':'1', 'recipient_id':'1', 'name':'Fiorentina Scarf', 'description':'Oversized Plaid Scarf with Fringe', 
+'image':'http://cdn.saleoffaccessories.com/d1/fc/d1fc1373d0e5e01ae234dd2c222b4468/la-fiorentina-plush-plaid-fringe-scarf.jpg', 
+'link':'http://www.amazon.com/Fiorentina-Womens-Oversized-Plaid-Fringe/dp/B00TV4CF36/ref=sr_1_7', 
+'status': 'idea'}
 
 

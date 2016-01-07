@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+  <h1>Welcome Back!</h1>
+  <h3>Here is the gift listing for {{recipient.name}}. ~
+  <a href="{{url_for('addGift')}}">Add a gift</a></h3>
+
+  <div class="row">
+    <div class="col-md-3">
+      <p>Birthday: {{recipient.bday}}</p>
+    </div>
+
+    <div class="col-md-3">
+      <p>Sizes: {{recipient.sizes}}</p>
+    </div>
+
+    <!-- spacer -->
+    <div class="col-md-3"></div>
+
+    <!-- spacer -->
+    <div class="col-md-3"></div>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th><!-- image --></th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Link</th>
+        <th>Tools</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for g in gifts %}
+        <tr>
+          <td><img src="{{g.image}}" alt="{{g.name}}" style="width:100px;height:100px;"></td>
+          <td>{{g.name}}</td>
+          <td>{{g.status}}</td>
+          <td><a href="{{g.link}}" target="_blank">{{g.link}}</a></td>
+          <td><a href="{{url_for('statusGift', rec_id=recipient.id, gift_id=g.id)}}">Change Status</a> ||
+            <a href="{{url_for('editGift', rec_id=recipient.id, gift_id=g.id)}}">Edit</a> ||
+            <a href="{{url_for('deleteGift', rec_id=recipient.id, gift_id=g.id)}}">Delete</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

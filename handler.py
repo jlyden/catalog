@@ -22,18 +22,15 @@ def register():
 
 @app.route('/recipients')
 def recipients():
-#    return 'Recipients listing'
     return render_template('recipients.html', recipients = recipients)
 
 @app.route('/recipients/add')
 def addRecipient():
-    return 'Add a recipient'
-#    return render_template('recipientAdd.html')
+    return render_template('recipientAdd.html')
 
 @app.route('/recipients/rec_id/edit')
 def editRecipient():
-    return 'Edit recipient with rec_id'
-#    return render_template('recipientEdit.html', recipient = recipient)
+    return render_template('recipientEdit.html', recipient = recipient)
 
 @app.route('/recipients/rec_id/delete')
 def deleteRecipient():
@@ -42,23 +39,19 @@ def deleteRecipient():
 
 @app.route('/recipients/rec_id/gifts')
 def gifts():
-    return 'Gifts listing for recipient with rec_id'
-#    return render_template('gifts.html', recipient = recipient, gifts = gifts)
+    return render_template('gifts.html', recipient = recipient, gifts = gifts)
 
 @app.route('/recipients/rec_id/gifts/add')
 def addGift():
-    return 'Add gift for recipient with rec_id'
-#    return render_template('giftAdd.html', recipient = recipient)
+    return render_template('giftAdd.html', recipient = recipient)
 
 @app.route('/recipients/rec_id/gifts/gift_id/status')
 def statusGift():
-    return 'Change status of gift with gift_id for recipient with rec_id'
-#    return render_template('giftChangeStatus.html', recipient = recipient, gift = gift)
+    return render_template('giftChangeStatus.html', recipient = recipient, gift = gift)
 
 @app.route('/recipients/rec_id/gifts/gift_id/edit')
 def editGift():
-    return 'Edit gift with gift_id status for recipient with rec_id'
-#    return render_template('giftEdit.html', recipient = recipient, gift = gift)
+    return render_template('giftEdit.html', recipient = recipient, gift = gift)
 
 @app.route('/recipients/rec_id/gifts/gift_id/delete')
 def deleteGift():

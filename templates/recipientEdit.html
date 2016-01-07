@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div>
+  <h1>Edit a recipient</h1>
+  <p>Enter only the information you want to change.</p>
+
+  <form id="editRecipient" action="{{url_for('editRecipient')}}" method="POST">
+    <fieldset class="form-group">
+      <label for="name">Name of Recipient</label>
+      <input type="text" class="form-control" name="name" placeholder="{{recipient.name}}" size='30' required>
+    </fieldset>
+    <fieldset class="form-group">
+      <label for="bday">Birthdate</label>
+      <input type="text" class="form-control" name="bday" placeholder="{{recipient.bday}}" size='20'>
+    </fieldset>
+    <fieldset class="form-group">
+      <label for="sizes">Sizes</label>
+      <input type="text" class="form-control" name="sizes" placeholder="{{recipient.sizes}}" size='20'>
+    </fieldset>
+    <input type="submit" class="btn btn-default" value="Change">
+    <a class="btn btn-default" onclick="goBack()">Cancel</a>
+  </form>
+
+</div>
+
+{% endblock %}

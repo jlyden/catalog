@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div>
+  <h1>Add a recipient</h1>
+
+  <form id="addRecipient" action="{{url_for('addRecipient')}}" method="POST">
+    <fieldset class="form-group">
+      <label for="name">Name of Recipient</label>
+      <input type="text" class="form-control" name="name" placeholder="Jane Doe" size='30' required>
+    </fieldset>
+    <fieldset class="form-group">
+      <label for="bday">Birthdate</label>
+      <input type="text" class="form-control" name="bday" placeholder="Jan 1" size='20'>
+    </fieldset>
+    <fieldset class="form-group">
+      <label for="sizes">Sizes</label>
+      <input type="text" class="form-control" name="sizes" placeholder="i.e., small or 6" size='20'>
+    </fieldset>
+    <input type="submit" class="btn btn-default" value="Add">
+    <a class="btn btn-default" onclick="goBack()">Cancel</a>
+  </form>
+
+</div>
+
+{% endblock %}
