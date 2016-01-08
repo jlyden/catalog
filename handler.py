@@ -13,6 +13,10 @@ from gifter_db import Base, Givers, Recipients, Gifts
 
 app = Flask(__name__)
 
+CLIENT_ID = json.loads(
+    open('client_secrets.json', 'r').read())['web']['client_id']
+APPLICATION_NAME = "Gifter"
+
 engine = create_engine('sqlite:///gifter.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
@@ -80,7 +84,7 @@ def gconnect():
 
     # If pass above tests ...
     stored_credentials = login_session.get('credentials')
-    stored_gplus_id = login_sessions.get('gplus_id')
+    stored_gplus_id = login_session.get('gplus_id')
     if stored_credentials is not None and gplus_id == stored_gplus_id:
         connectError('Current user is already connected.', 200)
 
@@ -88,14 +92,67 @@ def gconnect():
     login_session['credentials'] = access_token
     login_session['gplus_id'] = gplus_id
 
-    # Pick up at "Get user info"
+    # Get user info
+    userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
+    params = {'access_token': credentials.access_token, 'alt': 'json'}
+    answer = requests.get(userinfo_url, params=params)
+    data = answer.json()
 
+    login_session['provider'] = 'google'
+    login_session['username'] = data['name']
+    login_session['email'] = data['email']
+    login_session['picture'] = data['picture']
 
+    # Check if user exists in Database
+    email = login_session['email']
+    user_id = getGiverID(email)
+    if not user_id:
+        user_id = createGiver(login_session)
+    login_session['user_id'] = user_id
+
+    output = ''
+    output += '<h1>Welcome, '
+    output += login_session['username']
+    output += '!</h1>'
+    output += '<img src="'
+    output += login_session['picture']
+    output += '" style = "width: 150px; height 150px; border-radius: 75px;'
+    output += ' -webkit-border-radius: 75px; -moz-border-radius: 75px;">'
+    flash("You are now logged in as %s" % login_session['username'])
+    print "Login complete!"
+    return output
+
+# Google disconnect - revoke user's token
+@app.route('/gdisconnect')
+def gdisconnect():
+    # Only disconnect a connected user
+    access_token = login_session.get('credentials')
+
+# Helper functions
 def connectError(message, code):
         response = make_response(json.dumps(message), code)
         response.headers['Content-Type'] = 'application/json'
         return response
 
+def getGiverID(email):
+    try:
+        thisGiver = session.query(Givers).filter_by(email = email).one()
+        return thisGiver.id
+    except:
+        return None
+
+def getGiverInfo(user_id):
+    thisGiver = session.query(Givers).filter_by(id = user_id).one()
+    return thisGiver
+
+def createGiver(login_session):
+    newGiver = Givers(name = login_session['username'],
+                    email = login_session['email'],
+                    picture = login_session['picture'])
+    session.add(newGiver)
+    session.commit()
+    user_id = getGiverID(login_session['email'])
+    return user_id
 
 # Uncomment below when security added
 #                    filter(giver.id = login_session['giver_id']).\
