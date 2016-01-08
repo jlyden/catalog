@@ -43,11 +43,11 @@ Test after each stage
  c. other API endpoint - XML
  -- http://stackoverflow.com/questions/29023035/how-to-create-xml-endpoint-in-flask
 
-6. Add styling - CSS, JavaScript, images, message flashing (done), etc
- a. add files to /static folder
-
-7. Add security - OAuth2
+6. Add security - OAuth2
  a. https://pythonhosted.org/Flask-Security/
  b. In Delete, "use POST requests and nonces to prevent CSRF"
  - use token generated at login (https://www.owasp.org/index.php/CSRF_Prevention_Cheat_Sheet#General_Recommendation:_Synchronizer_Token_Pattern)
  c. in all post methods?
+
+7. Add styling - CSS, JavaScript, images, message flashing (done), etc
+ a. add files to /static folder

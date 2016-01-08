@@ -1,0 +1,100 @@
+"feat: Add methods for editR, editG, changeStatus, regive"
+
+Google API Key - AIzaSyAQh2khZON9fYLX8FH4GGr91nTkYIYcEu8
+Client ID - 906905857159-19l8lcp90j3utgq2itj4upgdjtjaaltm.apps.googleusercontent.com
+Client secret - n7MWMYbJdZABT-MgomBQjB2X
+
+
+TODO -
+* add link to return to gift list
+* add links (edit, change status) to gift details page
+* change format of date display
+
+Gifter -> www.gifter.com [or something]
+
+https://pixabay.com/static/uploads/photo/2014/04/02/17/03/present-307776_960_720.png
+
+Keep a list of RECIPIENTS you buy gifts for, and the GIFTS you have bought or want to buy, including images and links for the gifts
+
+Database includes GIVERS, RECIPIENTS and GIFTS tables
+ - GIVERS includes id + gmail/facebook login info (name, email, pic)
+ - RECIPIENTS includes id + optional details (sizes, birthdate) + association to GIVER
+ - GIFTS includes id + image + desc + optional link + date entered + date purchased + status(given, purchased, idea) + association to RECIPIENT_id & GIVER_id
+
+Webpages needed
+ - Welcome/Splash (no auth needed)
+/ & /welcome
+ - Login (no auth needed)
+/login
+ - Register (no auth needed)
+/registration
+ - My_Recipients listing AND links to Add_Recipient, PLUS foreach RECIPIENT: Edit_Recipient, Recipient_Gifts, Delete_Recipient
+/recipients
+ -- Add_Recipient
+/recipients/add
+ -- Edit_Recipient
+/recipients/rec_id/edit
+ -- Delete_Recipient
+/recipients/rec_id/delete
+ - Recipient_Gifts listing with image & link & expandable desc, sort by name or status (given, purchased, ideas), link to Add_Gift, plus foreach GIFT: Change_Status, Edit_Gift, Delete_Gift
+/recipients/rec_id/gifts
+ -- Add_Gift
+/recipients/rec_id/gifts/add
+ -- Change_Status
+/recipients/rec_id/gifts/gift_id/status
+ -- Edit_Gift
+/recipients/rec_id/gifts/gift_id/edit
+ -- Delete_Gift
+/recipients/rec_id/gifts/gift_id/delete
+
+
+#Fake Recipients
+recipient = {'id':'1', 'name':'Susan Whitaker', 'bday':'Jan 2', 'sizes':'small'}
+recipients = [{'id':'1', 'name':'Susan Whitaker', 'bday':'Jan 2', 'sizes':'small'}, 
+{'id':'2', 'name':'Anne Lyden', 'bday':'Aug 30', 'sizes':'medium'}, 
+{'id':'3', 'name':'Pepper Whitaker', 'bday':'Sept 2', 'sizes':'0-3 mo'}]
+
+#Fake Gifts
+gifts = [{'id':'1', 'recipient_id':'1', 'name':'Fiorentina Scarf', 'description':'Oversized Plaid Scarf with Fringe', 
+'image':'http://cdn.saleoffaccessories.com/d1/fc/d1fc1373d0e5e01ae234dd2c222b4468/la-fiorentina-plush-plaid-fringe-scarf.jpg', 
+'link':'http://www.amazon.com/Fiorentina-Womens-Oversized-Plaid-Fringe/dp/B00TV4CF36/ref=sr_1_7', 
+'status':'idea'}, 
+{'id':'2', 'recipient_id':'1', 'name':"What to Expect When You're Expecting", 'description':'America's pregnancy bible', 
+'image':'https://upload.wikimedia.org/wikipedia/en/d/d6/What_to_Expect_When_You're_Expecting_Cover.jpg', 
+'link':'http://www.amazon.com/What-Expect-When-Youre-Expecting/dp/0761148574/ref=sr_1_1', 
+'status':'idea'}, 
+{'id': '3', 'recipient_id':'1', 'name':'Mama Bee Belly Butter', 'description':"Burt's Bees Belly Butter, 6.5 Ounce", 
+
+'image':'http://www.allbabyforbaby.com/image/cache/data/burts-bees/burts-bees-mama-bee-belly-butter-6-5-ounce-2-500x500.jpg', 
+
+'link':'http://www.amazon.com/gp/product/B00DM14TYC/ref=s9_simh_gw_p14_d0_i5', 
+
+'status':'idea'}, 
+{'id':'4', 'recipient_id':'1', 'name':'Total Body Pillow', 'description':'Supports hips, back, neck, and tummy', 
+
+'image':'http://s7d9.scene7.com/is/image/BedBathandBeyond/8000415038357p', 
+
+'link':'http://www.amazon.com/gp/product/B0000635WI/ref=s9_simh_gw_p121_d0_i3', 
+
+'status': 'idea'},
+{'id':'5', 'recipient_id':'1', 'name':'Baby Sling Carrier', 'description':'For babies from birth to 35 lbs', 
+'image':'https://images-na.ssl-images-amazon.com/images/I/41QZfy9IkAL.jpg', 
+'link':'http://www.amazon.com/Original--Fashion-Comfortable-Innoo-Tech/dp/B0156HL9WE/ref=sr_1_4', 
+'status': 'idea'}]
+gift = {'id':'1', 'recipient_id':'1', 'name':'Fiorentina Scarf', 'description':'Oversized Plaid Scarf with Fringe', 
+'image':'http://cdn.saleoffaccessories.com/d1/fc/d1fc1373d0e5e01ae234dd2c222b4468/la-fiorentina-plush-plaid-fringe-scarf.jpg', 
+'link':'http://www.amazon.com/Fiorentina-Womens-Oversized-Plaid-Fringe/dp/B00TV4CF36/ref=sr_1_7', 
+'status': 'idea'}
+
+
+# API Endpoint - XML
+# help from: http://stackoverflow.com/questions/29023035/how-to-create-xml-endpoint-in-flask
+# and: http://www.diveintopython3.net/xml.html#xml-generate
+@app.route('/recipients/XML')
+def allRecipientsXML():
+    recipientsXML = etree.Element('root', attrib={'{root}lang': 'en'})
+    # add data
+    title = etree.SubElement(recipientsXML, 'title', attrib={'type':'html'})
+    title.text = 'Recipients List'
+    return app.response_class(etree.dump(recipientsXML), mimetype='application/xml')
+

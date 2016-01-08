@@ -1,4 +1,4 @@
-# Runs Flask Application for Giftie Web App
+# Runs Flask Application for Gifter Web App
 # written by jennifer lyden for Udacity FullStack Nanodegree
 
 from flask import Flask, render_template, url_for, request, redirect, flash, jsonify, make_response
@@ -7,13 +7,12 @@ from sqlalchemy import create_engine, literal
 from sqlalchemy.orm import sessionmaker
 import datetime, random, string, httplib2, json, requests
 from datetime import date, timedelta
-import xml.etree.ElementTree as etree
-from giftie_db import Base, Givers, Recipients, Gifts
+from gifter_db import Base, Givers, Recipients, Gifts
 
 
 app = Flask(__name__)
 
-engine = create_engine('sqlite:///giftie.db')
+engine = create_engine('sqlite:///gifter.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
@@ -36,6 +35,7 @@ def welcome():
 
 @app.route('/login')
 def login():
+
     return render_template('login.html')
 
 @app.route('/register')
