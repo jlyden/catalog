@@ -5,6 +5,7 @@ from flask import Flask, render_template, url_for, request, redirect, flash, jso
 from flask import session as login_session
 from sqlalchemy import create_engine, literal
 from sqlalchemy.orm import sessionmaker
+from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 import datetime, random, string, httplib2, json, requests
 from datetime import date, timedelta
 from gifter_db import Base, Givers, Recipients, Gifts
@@ -33,14 +34,68 @@ def allGiftsJSON():
 def welcome():
     return render_template('welcome.html')
 
+# State token to prevent request forgery
 @app.route('/login')
-def login():
-
-    return render_template('login.html')
+def showLogin():
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+    login_session['state'] = state
+    return render_template('login.html', STATE = state)
 
 @app.route('/register')
 def register():
     return render_template('register.html')
+
+# Google Sign In functions
+@app.route('/gconnect', methods=['POST'])
+def gconnect():
+    if request.args.get('state') != login_session['state']:
+        connectError('Invalid state parameter', 401)
+    code = request.data
+
+    # Upgrade auth code into credentials object
+    try:
+        oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
+        oauth_flow.redirect_uri = 'postmessage'
+        credentials = oauth_flow.step2_exchange(code)
+    except FlowExchangeError:
+        connectError('Failed to upgrade the authorization code.', 401)
+
+    # Check access token is valid
+    access_token = credentials.access_token
+    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s' % access_token)
+    h = httplib2.Http()
+    result = json.loads(h.request(url, 'GET')[1])
+    # If there was error in access token info, abort
+    if result.get('error') is not None:
+        connectError(result.get('error'), 500)
+
+    # Verify intended user presented access token
+    gplus_id = credentials.id_token['sub']
+    if result['user_id'] != gplus_id:
+        connectError("Token's user ID doesn't match given user ID.", 401)
+
+    # Verify access token valid for this app
+    if result['issued_to'] != '906905857159-19l8lcp90j3utgq2itj4upgdjtjaaltm.apps.googleusercontent.com':
+        connectError("Token's client ID doesn't match app's.", 401)
+
+    # If pass above tests ...
+    stored_credentials = login_session.get('credentials')
+    stored_gplus_id = login_sessions.get('gplus_id')
+    if stored_credentials is not None and gplus_id == stored_gplus_id:
+        connectError('Current user is already connected.', 200)
+
+    # Store access token in session for later use
+    login_session['credentials'] = access_token
+    login_session['gplus_id'] = gplus_id
+
+    # Pick up at "Get user info"
+
+
+def connectError(message, code):
+        response = make_response(json.dumps(message), code)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
 
 # Uncomment below when security added
 #                    filter(giver.id = login_session['giver_id']).\

@@ -4,6 +4,9 @@ Google API Key - AIzaSyAQh2khZON9fYLX8FH4GGr91nTkYIYcEu8
 Client ID - 906905857159-19l8lcp90j3utgq2itj4upgdjtjaaltm.apps.googleusercontent.com
 Client secret - n7MWMYbJdZABT-MgomBQjB2X
 
+Facebook - appId - 675385429230619
+client secret - f0a019b8de258353834bf3b861933e3e
+
 
 TODO -
 * add link to return to gift list
