@@ -103,6 +103,14 @@ def gifts(rec_id):
     else:
         return render_template('giftsYes.html', recipient = thisRecipient, gifts = items)
 
+@app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>')
+def giftDetails(rec_id, gift_id):
+    thisRecipient = session.query(Recipients).\
+                    filter_by(id = rec_id).one()
+    thisGift = session.query(Gifts).\
+                    filter_by(id = gift_id).one()
+    return render_template('giftDetails.html', recipient = thisRecipient, gift = thisGift)
+
 # Uncomment below when security added
 # giver_id=login_session['user_id']
 @app.route('/recipients/<int:rec_id>/gifts/add', methods=['GET', 'POST'])
@@ -110,16 +118,15 @@ def addGift(rec_id):
     thisRecipient = session.query(Recipients).\
                         filter_by(id = rec_id).one()
     if request.method == 'POST':
-        status = request.form['status']
         newGift = Gifts(name = request.form['name'],\
                         desc = request.form['desc'],\
                         link = request.form['linkBuy'],\
                         image = request.form['linkPic'],\
-                        status = status,\
+                        status = request.form['status'],\
                         date_added = date.today(),\
                         rec_id = rec_id)
-#        if status == 'given':
-#            newGift.date_given = date.today()
+        if newGift.status == 'given':
+            newGift.date_given = date.today()
         session.add(newGift)
         session.commit()
         flash("New gift added!")
@@ -145,8 +152,6 @@ def regiveGift(gift_id):
                         status = "idea",\
                         date_added = date.today(),\
                         rec_id = newRec.id)
-#        if status == 'given':
-#            newGift.date_given = date.today()
         session.add(newGift)
         session.commit()
         flash("Gift added for a new recipient!")
@@ -161,6 +166,8 @@ def statusGift(rec_id, gift_id):
     if request.method == 'POST':
         if request.form['status']:
             thisGift.status = request.form['status']
+            if thisGift.status == 'given':
+                thisGift.date_given = date.today()
         session.add(thisGift)
         session.commit()
         flash("Gift status changed!")
@@ -183,6 +190,8 @@ def editGift(rec_id, gift_id):
             thisGift.image = request.form['linkPic']
         if request.form['status']:
             thisGift.status = request.form['status']
+            if thisGift.status == 'given':
+                thisGift.date_given = date.today()
         session.add(thisGift)
         session.commit()
         flash("Gift information changed!")

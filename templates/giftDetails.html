@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div>
+  <h1>Gift Details for {{recipient.name}}</h1>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th><!-- image --></th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Desc</th>
+        <th>Date Added</th>
+        <th>Date Given</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><img src="{{gift.image}}" alt="{{gift.name}}" style="width:100px;height:100px;"></td>
+          <td>{{gift.name}}</td>
+          <td>{{gift.status}}</td>
+          <td>{{gift.desc}}</br>
+          <a href="{{g.link}}" target="_blank">{{gift.link}}</a></td>
+          <td>{{gift.date_added}}</td>
+          <td>{{gift.date_given}}</td>
+        </tr>
+    </tbody>
+  </table>
+
+</div>
+
+{% endblock %}

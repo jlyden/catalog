@@ -35,16 +35,20 @@ Test after each stage
  a. Setup database.py
  b. Set up CRUD for methods as needed (GET or POST)
  c. Add url_for and redirect when necessary
- d. In Delete, "use POST requests and nonces to prevent CSRF"
+ d. include message flashing for when things are created, updated, deleted
 
 5. Add API endpoints
  a. import jsonify, add serialize property as needed
- b. JSON - persons/JSON, person/gifts/JSON, person/gifts/item/JSON
- c. other API endpoint - RSS, Atom, XML
+ b. JSON - recipients/JSON, recipients/gifts/JSON, person/gifts/item/JSON
+ c. other API endpoint - XML
+ -- http://stackoverflow.com/questions/29023035/how-to-create-xml-endpoint-in-flask
+ -- http://stackoverflow.com/questions/29023035/how-to-create-xml-endpoint-in-flask
 
-6. Add styling - CSS, JavaScript, images, message flashing, etc
+6. Add styling - CSS, JavaScript, images, message flashing (done), etc
  a. add files to /static folder
- b. add message flashing for when things are created, updated, deleted
 
 7. Add security - OAuth2
  a. https://pythonhosted.org/Flask-Security/
+ b. In Delete, "use POST requests and nonces to prevent CSRF"
+ - use token generated at login (https://www.owasp.org/index.php/CSRF_Prevention_Cheat_Sheet#General_Recommendation:_Synchronizer_Token_Pattern)
+ c. in all post methods?

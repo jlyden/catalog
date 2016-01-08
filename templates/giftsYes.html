@@ -3,8 +3,9 @@
 
 <div class="container">
   <h1>Welcome Back!</h1>
-  <h3>Here is the gift listing for {{recipient.name}}. ~
-  <a href="{{url_for('addGift', rec_id = recipient.id)}}">Add a gift</a></h3>
+  <p>Here is the gift listing for {{recipient.name}}.</p>
+  <p>Click gift name for more information.</p>
+  <p><a href="{{url_for('addGift', rec_id = recipient.id)}}">Add a gift</a></p>
 
   <div class="row">
     <div class="col-md-3">
@@ -36,7 +37,7 @@
       {% for g in gifts %}
         <tr>
           <td><img src="{{g.image}}" alt="{{g.name}}" style="width:100px;height:100px;"></td>
-          <td>{{g.name}}</td>
+          <td><a href="{{url_for('giftDetails', rec_id=recipient.id, gift_id=g.id)}}">{{g.name}}</a></td>
           <td>{{g.status}}</td>
           <td><a href="{{g.link}}" target="_blank">{{g.link}}</a></td>
           <td><a href="{{url_for('statusGift', rec_id=recipient.id, gift_id=g.id)}}">Change Status</a> ||
