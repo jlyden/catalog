@@ -1,6 +1,7 @@
 TODO -
+* add links to return to recipient list and gift list
+* add date_given support to statusGift and editGift
 
-add links to return to recipient list and gift list
 
 Giftie -> www.giftie.com [or something]
 

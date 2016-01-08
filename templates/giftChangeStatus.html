@@ -5,12 +5,9 @@
   <h1>Change Status of Gift</h1>
   <p>If you've bought the gift, set status to "purchased." If you've given it, set status to "given."</p>
 
-  <form id="editGift" action="{{url_for('editGift')}}" method="POST">
+  <form id="statusGift" action="{{url_for('statusGift', rec_id = rec_id, gift_id = gift_id)}}" method="POST">
     <fieldset class="form-group">
-      <label for="name">Name of Gift</label>
-      <input type="text" class="form-control" name="name" placeholder="{{gift.name}}" size='30' required>
-    </fieldset>
-    <fieldset class="form-group">
+      <h3>{{gift.name}}</h3>
       <label for="status">Status</label>
       <select name="status">
         <option value="idea">idea</option>

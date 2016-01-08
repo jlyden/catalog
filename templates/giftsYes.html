@@ -41,6 +41,7 @@
           <td><a href="{{g.link}}" target="_blank">{{g.link}}</a></td>
           <td><a href="{{url_for('statusGift', rec_id=recipient.id, gift_id=g.id)}}">Change Status</a> ||
             <a href="{{url_for('editGift', rec_id=recipient.id, gift_id=g.id)}}">Edit</a> ||
+            <a href="{{url_for('regiveGift', gift_id=g.id)}}">Give to another</a> ||
             <a href="{{url_for('deleteGift', rec_id=recipient.id, gift_id=g.id)}}">Delete</a></td>
         </tr>
       {% endfor %}

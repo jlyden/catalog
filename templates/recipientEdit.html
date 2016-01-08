@@ -5,10 +5,10 @@
   <h1>Edit a recipient</h1>
   <p>Enter only the information you want to change.</p>
 
-  <form id="editRecipient" action="{{url_for('editRecipient')}}" method="POST">
+  <form id="editRecipient" action="{{url_for('editRecipient', rec_id = rec_id)}}" method="POST">
     <fieldset class="form-group">
       <label for="name">Name of Recipient</label>
-      <input type="text" class="form-control" name="name" placeholder="{{recipient.name}}" size='30' required>
+      <input type="text" class="form-control" name="name" placeholder="{{recipient.name}}" size='30'>
     </fieldset>
     <fieldset class="form-group">
       <label for="bday">Birthdate</label>

@@ -1,4 +1,4 @@
-# Runs Flask Application for Giftie Webpages
+# Runs Flask Application for Giftie Web App
 # written by jennifer lyden for Udacity FullStack Nanodegree
 
 from flask import Flask, render_template, url_for, request, redirect, flash, jsonify, make_response
@@ -12,8 +12,6 @@ from giftie_db import Base, Givers, Recipients, Gifts
 
 app = Flask(__name__)
 
-
-# Database connection setup
 engine = create_engine('sqlite:///giftie.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
@@ -59,19 +57,36 @@ def addRecipient():
     else:
         return render_template('recipientAdd.html')
 
-@app.route('/recipients/<int:rec_id>/edit')
-def editRecipient():
-    # Update to Recipients table
-    return render_template('recipientEdit.html', recipient = recipient)
+@app.route('/recipients/<int:rec_id>/edit', methods = ['GET', 'POST'])
+def editRecipient(rec_id):
+    thisRecipient = session.query(Recipients).\
+                        filter_by(id = rec_id).one()
+    if request.method == 'POST':
+        if request.form['name']:
+            thisRecipient.name = request.form['name']
+        if request.form['bday']:
+            thisRecipient.bday = request.form['bday']
+        if request.form['sizes']:
+            thisRecipient.sizes = request.form['sizes']
+        session.add(thisRecipient)
+        session.commit()
+        flash("Recipient information changed!")
+        return redirect(url_for('recipients'))
+    else:
+        return render_template('recipientEdit.html', recipient = thisRecipient, rec_id = rec_id)
 
 @app.route('/recipients/<int:rec_id>/delete', methods=['GET', 'POST'])
 def deleteRecipient(rec_id):
     thisRecipient = session.query(Recipients).\
                         filter_by(id = rec_id).one()
     if request.method == 'POST':
+        theirGifts = session.query(Gifts).\
+                        filter_by(rec_id = rec_id).all()
+        for g in theirGifts:
+            session.delete(g)
         session.delete(thisRecipient)
         session.commit()
-        flash("Recipient deleted!")
+        flash("Recipient and gifts deleted!")
         return redirect(url_for('recipients'))
     else:
         return render_template('recipientDelete.html', recipient = thisRecipient)
@@ -81,6 +96,7 @@ def gifts(rec_id):
     thisRecipient = session.query(Recipients).\
                     filter_by(id = rec_id).one()
     items = session.query(Gifts).\
+                    filter_by(rec_id = rec_id).\
                     order_by(Gifts.name).all()
     if not items:
         return render_template('giftsNo.html', recipient = thisRecipient)
@@ -93,12 +109,10 @@ def gifts(rec_id):
 def addGift(rec_id):
     thisRecipient = session.query(Recipients).\
                         filter_by(id = rec_id).one()
-    print(thisRecipient)
-    # Create in Gifts table
     if request.method == 'POST':
         status = request.form['status']
         newGift = Gifts(name = request.form['name'],\
-                        desc = request.form['description'],\
+                        desc = request.form['desc'],\
                         link = request.form['linkBuy'],\
                         image = request.form['linkPic'],\
                         status = status,\
@@ -113,15 +127,68 @@ def addGift(rec_id):
     else:
         return render_template('giftAdd.html', recipient = thisRecipient, rec_id = rec_id)
 
-@app.route('/recipients/rec_id/gifts/gift_id/status')
-def statusGift():
-    # Update to Gifts table
-    return render_template('giftChangeStatus.html', recipient = recipient, gift = gift)
+# Uncomment below when security added
+# giver_id=login_session['user_id']
+@app.route('/recipients/gifts/<int:gift_id>/regive', methods=['GET', 'POST'])
+def regiveGift(gift_id):
+    oldGift = session.query(Gifts).\
+                        filter_by(id = gift_id).one()
+    allRecipients = session.query(Recipients).\
+                        order_by(Recipients.name).all()
+    if request.method == 'POST':
+        newRec = session.query(Recipients).\
+                        filter_by(name = request.form['newRecipient']).one()
+        newGift = Gifts(name = oldGift.name,\
+                        desc = oldGift.desc,\
+                        link = oldGift.link,\
+                        image = oldGift.image,\
+                        status = "idea",\
+                        date_added = date.today(),\
+                        rec_id = newRec.id)
+#        if status == 'given':
+#            newGift.date_given = date.today()
+        session.add(newGift)
+        session.commit()
+        flash("Gift added for a new recipient!")
+        return redirect(url_for('gifts', rec_id = newRec.id))
+    else:
+        return render_template('giftRegive.html', gift_id = gift_id, gift = oldGift, recipients = allRecipients)
 
-@app.route('/recipients/rec_id/gifts/gift_id/edit')
-def editGift():
-    # Update to Gifts table
-    return render_template('giftEdit.html', recipient = recipient, gift = gift)
+@app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/status', methods = ['GET', 'POST'])
+def statusGift(rec_id, gift_id):
+    thisGift = session.query(Gifts).\
+                    filter_by(id = gift_id).one()
+    if request.method == 'POST':
+        if request.form['status']:
+            thisGift.status = request.form['status']
+        session.add(thisGift)
+        session.commit()
+        flash("Gift status changed!")
+        return redirect(url_for('gifts', rec_id = rec_id, gift_id = gift_id))
+    else:
+        return render_template('giftChangeStatus.html', gift = thisGift, rec_id = rec_id, gift_id = gift_id)
+
+@app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/edit', methods = ['GET', 'POST'])
+def editGift(rec_id, gift_id):
+    thisGift = session.query(Gifts).\
+                    filter_by(id = gift_id).one()
+    if request.method == 'POST':
+        if request.form['name']:
+            thisGift.name = request.form['name']
+        if request.form['desc']:
+            thisGift.desc = request.form['desc']
+        if request.form['linkBuy']:
+            thisGift.link = request.form['linkBuy']
+        if request.form['linkPic']:
+            thisGift.image = request.form['linkPic']
+        if request.form['status']:
+            thisGift.status = request.form['status']
+        session.add(thisGift)
+        session.commit()
+        flash("Gift information changed!")
+        return redirect(url_for('gifts', rec_id = rec_id, gift_id = gift_id))
+    else:
+        return render_template('giftEdit.html', gift = thisGift, rec_id = rec_id, gift_id = gift_id)
 
 @app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/delete', methods=['GET', 'POST'])
 def deleteGift(rec_id, gift_id):
