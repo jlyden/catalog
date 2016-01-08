@@ -38,10 +38,9 @@ Test after each stage
  d. include message flashing for when things are created, updated, deleted
 
 5. Add API endpoints
- a. import jsonify, add serialize property as needed
- b. JSON - recipients/JSON, recipients/gifts/JSON, person/gifts/item/JSON
+ a. import jsonify, add methods as needed
+ b. add serialize property to database setup
  c. other API endpoint - XML
- -- http://stackoverflow.com/questions/29023035/how-to-create-xml-endpoint-in-flask
  -- http://stackoverflow.com/questions/29023035/how-to-create-xml-endpoint-in-flask
 
 6. Add styling - CSS, JavaScript, images, message flashing (done), etc

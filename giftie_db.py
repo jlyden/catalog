@@ -28,6 +28,15 @@ class Recipients(Base):
     giver_id = Column(Integer, ForeignKey('givers.id'))
     givers = relationship(Givers)
 
+    @property
+    def serialize(self):
+        return {
+            'id' : self.id,
+            'name' : self.name,
+            'bday' : self.bday,
+            'sizes' : self.sizes,
+        }
+
 
 class Gifts(Base):
 
@@ -46,6 +55,15 @@ class Gifts(Base):
     rec_id = Column(Integer, ForeignKey('recipients.id'))
     recipients = relationship(Recipients)
 
+    @property
+    def serialize(self):
+        return {
+            'id' : self.id,
+            'name' : self.name,
+            'description' : self.desc,
+            'link' : self.link,
+            'status' : self.status,
+        }
 
 engine = create_engine('sqlite:///giftie.db')
 

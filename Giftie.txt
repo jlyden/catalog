@@ -82,3 +82,14 @@ gift = {'id':'1', 'recipient_id':'1', 'name':'Fiorentina Scarf', 'description':'
 'status': 'idea'}
 
 
+# API Endpoint - XML
+# help from: http://stackoverflow.com/questions/29023035/how-to-create-xml-endpoint-in-flask
+# and: http://www.diveintopython3.net/xml.html#xml-generate
+@app.route('/recipients/XML')
+def allRecipientsXML():
+    recipientsXML = etree.Element('root', attrib={'{root}lang': 'en'})
+    # add data
+    title = etree.SubElement(recipientsXML, 'title', attrib={'type':'html'})
+    title.text = 'Recipients List'
+    return app.response_class(etree.dump(recipientsXML), mimetype='application/xml')
+

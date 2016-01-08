@@ -7,6 +7,7 @@ from sqlalchemy import create_engine, literal
 from sqlalchemy.orm import sessionmaker
 import datetime, random, string, httplib2, json, requests
 from datetime import date, timedelta
+import xml.etree.ElementTree as etree
 from giftie_db import Base, Givers, Recipients, Gifts
 
 
@@ -17,6 +18,16 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+# API Endpoint - JSON
+@app.route('/recipients/JSON')
+def allRecipientsJSON():
+    items = session.query(Recipients).order_by(Recipients.id).all()
+    return jsonify(AllRecipients = [i.serialize for i in items])
+
+@app.route('/gifts/JSON')
+def allGiftsJSON():
+    items = session.query(Gifts).order_by(Gifts.id).all()
+    return jsonify(AllGifts = [i.serialize for i in items])
 
 @app.route('/')
 @app.route('/welcome')
