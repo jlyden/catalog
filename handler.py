@@ -13,10 +13,12 @@ from gifter_db import Base, Givers, Recipients, Gifts
 
 app = Flask(__name__)
 
+# For Google authentication
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Gifter"
 
+# Database connection setup
 engine = create_engine('sqlite:///gifter.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
@@ -46,7 +48,9 @@ def showLogin():
     return render_template('login.html', STATE = state)
 
 @app.route('/register')
-def register():
+def showRegister():
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+    login_session['state'] = state
     return render_template('register.html')
 
 # Google Sign In functions
@@ -110,6 +114,7 @@ def gconnect():
         user_id = createGiver(login_session)
     login_session['user_id'] = user_id
 
+    # Respond to user
     output = ''
     output += '<h1>Welcome, '
     output += login_session['username']
@@ -168,7 +173,7 @@ def fbconnect():
     login_session['email'] = data['email']
     login_session['facebook_id'] = data['id']
 
-    # store access token for later logout
+    # Store access token for later logout
     stored_token = token.split("=")[1]
     login_session['access_token'] = stored_token
 
@@ -185,6 +190,7 @@ def fbconnect():
         user_id = createGiver(login_session)
     login_session['user_id'] = user_id
 
+    # Respond to user
     output = ''
     output += '<h1>Welcome, '
     output += login_session['username']
@@ -206,10 +212,11 @@ def fbdisconnect():
     result = h.request(url, 'DELETE')[1]
     return "You have been logged out."
 
-# Disconnect - calls provider disconnects to revoke access token & reset login_session
+# Super disconnect
 @app.route('/disconnect')
 def disconnect():
     if 'provider' in login_session:
+        # Call provider disconnect to revoke access token
         if login_session['provider'] == 'google':
             gdisconnect()
             del login_session['gplus_id']
@@ -217,6 +224,8 @@ def disconnect():
         if login_session['provider'] == 'facebook':
             fbdisconnect()
             del login_session['facebook_id']
+
+        # Finish reset of  login_session
         del login_session['username']
         del login_session['email']
         del login_session['picture']
@@ -236,13 +245,13 @@ def connectMessage(message, code):
 
 def getGiverID(email):
     try:
-        thisGiver = session.query(Givers).filter_by(email = email).one()
+        thisGiver = session.query(Givers).filter_by(email = email).first()
         return thisGiver.id
     except:
         return None
 
 def getGiverInfo(user_id):
-    thisGiver = session.query(Givers).filter_by(id = user_id).one()
+    thisGiver = session.query(Givers).filter_by(id = user_id).first()
     return thisGiver
 
 def createGiver(login_session):
@@ -254,25 +263,31 @@ def createGiver(login_session):
     user_id = getGiverID(login_session['email'])
     return user_id
 
-# Uncomment below when security added
-#                    filter(giver.id = login_session['giver_id']).\
+# User's (Giver's) recipient list
 @app.route('/recipients')
 def recipients():
+    if 'username' not in login_session:
+        flash('Sorry, you must login before proceeding.')
+        return redirect(url_for('welcome'))
     items = session.query(Recipients).\
+                    filter_by(giver_id = login_session['user_id']).\
                     order_by(Recipients.name).all()
     if not items:
         return render_template('recipientsNo.html')
     else:
         return render_template('recipientsYes.html', recipients = items)
 
-# Uncomment below when security added
-# giver_id=login_session['user_id']
+# Add recipient
 @app.route('/recipients/add', methods=['GET', 'POST'])
 def addRecipient():
+    if 'username' not in login_session:
+        flash('Sorry, you must login before proceeding.')
+        return redirect(url_for('welcome'))
     if request.method == 'POST':
         newRecipient = Recipients(name = request.form['name'],
                         bday = request.form['bday'],
-                        sizes = request.form['sizes'])
+                        sizes = request.form['sizes'],
+                        giver_id = login_session['user_id'])
         session.add(newRecipient)
         session.commit()
         flash("New recipient added!")
@@ -280,10 +295,20 @@ def addRecipient():
     else:
         return render_template('recipientAdd.html')
 
+# Edit recipient
 @app.route('/recipients/<int:rec_id>/edit', methods = ['GET', 'POST'])
 def editRecipient(rec_id):
+    if 'username' not in login_session:
+        flash('Sorry, you must login before proceeding.')
+        return redirect(url_for('welcome'))
     thisRecipient = session.query(Recipients).\
-                        filter_by(id = rec_id).one()
+                        filter_by(id = rec_id).first()
+    if not thisRecipient:
+        flash('No such recipient!')
+        return redirect(url_for('recipients'))
+    if thisRecipient.giver_id != login_session['user_id']:
+        flash('Sorry, you are not authorized to edit this recipient.')
+        return redirect(url_for('recipients'))
     if request.method == 'POST':
         if request.form['name']:
             thisRecipient.name = request.form['name']
@@ -298,10 +323,20 @@ def editRecipient(rec_id):
     else:
         return render_template('recipientEdit.html', recipient = thisRecipient, rec_id = rec_id)
 
+# Delete recipient & recipient's gifts
 @app.route('/recipients/<int:rec_id>/delete', methods=['GET', 'POST'])
 def deleteRecipient(rec_id):
+    if 'username' not in login_session:
+        flash('Sorry, you must login before proceeding.')
+        return redirect(url_for('welcome'))
     thisRecipient = session.query(Recipients).\
-                        filter_by(id = rec_id).one()
+                        filter_by(id = rec_id).first()
+    if not thisRecipient:
+        flash('No such recipient!')
+        return redirect(url_for('recipients'))
+    if thisRecipient.giver_id != login_session['user_id']:
+        flash('Sorry, you are not authorized to delete this recipient.')
+        return redirect(url_for('recipients'))
     if request.method == 'POST':
         theirGifts = session.query(Gifts).\
                         filter_by(rec_id = rec_id).all()
@@ -314,10 +349,17 @@ def deleteRecipient(rec_id):
     else:
         return render_template('recipientDelete.html', recipient = thisRecipient)
 
+# Gifts list associated with a particular recipient
 @app.route('/recipients/<int:rec_id>/gifts')
 def gifts(rec_id):
+    if 'username' not in login_session:
+        flash('Sorry, you must login before proceeding.')
+        return redirect(url_for('welcome'))
     thisRecipient = session.query(Recipients).\
-                    filter_by(id = rec_id).one()
+                    filter_by(id = rec_id).first()
+    if not thisRecipient:
+        flash('No such recipient!')
+        return redirect(url_for('recipients'))
     items = session.query(Gifts).\
                     filter_by(rec_id = rec_id).\
                     order_by(Gifts.name).all()
@@ -326,27 +368,46 @@ def gifts(rec_id):
     else:
         return render_template('giftsYes.html', recipient = thisRecipient, gifts = items)
 
+# See details about particular gift
 @app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>')
 def giftDetails(rec_id, gift_id):
+    if 'username' not in login_session:
+        flash('Sorry, you must login before proceeding.')
+        return redirect(url_for('welcome'))
     thisRecipient = session.query(Recipients).\
-                    filter_by(id = rec_id).one()
+                    filter_by(id = rec_id).first()
+    if not thisRecipient:
+        flash('No such recipient!')
+        return redirect(url_for('recipients'))
     thisGift = session.query(Gifts).\
-                    filter_by(id = gift_id).one()
+                    filter_by(id = gift_id).first()
+    if not thisGift:
+        flash('No such gift!')
+        return redirect(url_for('gifts'))
     return render_template('giftDetails.html', recipient = thisRecipient, gift = thisGift)
 
-# Uncomment below when security added
-# giver_id=login_session['user_id']
+# Add a gift for a particular recipient
 @app.route('/recipients/<int:rec_id>/gifts/add', methods=['GET', 'POST'])
 def addGift(rec_id):
+    if 'username' not in login_session:
+        flash('Sorry, you must login before proceeding.')
+        return redirect(url_for('welcome'))
     thisRecipient = session.query(Recipients).\
-                        filter_by(id = rec_id).one()
+                        filter_by(id = rec_id).first()
+    if not thisRecipient:
+        flash('No such recipient!')
+        return redirect(url_for('recipients'))
+    if thisRecipient.giver_id != login_session['user_id']:
+        flash('Sorry, you are not authorized to add a Gift for this recipient.')
+        return redirect(url_for('recipients'))
     if request.method == 'POST':
-        newGift = Gifts(name = request.form['name'],\
-                        desc = request.form['desc'],\
-                        link = request.form['linkBuy'],\
-                        image = request.form['linkPic'],\
-                        status = request.form['status'],\
-                        date_added = date.today(),\
+        newGift = Gifts(name = request.form['name'],
+                        desc = request.form['desc'],
+                        link = request.form['linkBuy'],
+                        image = request.form['linkPic'],
+                        status = request.form['status'],
+                        date_added = date.today(),
+                        giver_id=login_session['user_id'],
                         rec_id = rec_id)
         if newGift.status == 'given':
             newGift.date_given = date.today()
@@ -357,23 +418,34 @@ def addGift(rec_id):
     else:
         return render_template('giftAdd.html', recipient = thisRecipient, rec_id = rec_id)
 
-# Uncomment below when security added
-# giver_id=login_session['user_id']
+# Copy an already registered gift to a different recipient
 @app.route('/recipients/gifts/<int:gift_id>/regive', methods=['GET', 'POST'])
 def regiveGift(gift_id):
+    if 'username' not in login_session:
+        flash('Sorry, you must login before proceeding.')
+        return redirect(url_for('welcome'))
     oldGift = session.query(Gifts).\
-                        filter_by(id = gift_id).one()
+                        filter_by(id = gift_id).first()
+    if not oldGift:
+        flash('No such gift!')
+        return redirect(url_for('gifts'))
+    giver_id = login_session['user_id']
     allRecipients = session.query(Recipients).\
+                        filter_by(giver_id = giver_id).\
                         order_by(Recipients.name).all()
+    if not allRecipients:
+        flash('You have no recipients.')
+        return redirect(url_for('recipients'))
     if request.method == 'POST':
         newRec = session.query(Recipients).\
-                        filter_by(name = request.form['newRecipient']).one()
-        newGift = Gifts(name = oldGift.name,\
-                        desc = oldGift.desc,\
-                        link = oldGift.link,\
-                        image = oldGift.image,\
-                        status = "idea",\
-                        date_added = date.today(),\
+                        filter_by(name = request.form['newRecipient']).first()
+        newGift = Gifts(name = oldGift.name,
+                        desc = oldGift.desc,
+                        link = oldGift.link,
+                        image = oldGift.image,
+                        status = "idea",
+                        date_added = date.today(),
+                        giver_id=login_session['user_id'],
                         rec_id = newRec.id)
         session.add(newGift)
         session.commit()
@@ -382,10 +454,19 @@ def regiveGift(gift_id):
     else:
         return render_template('giftRegive.html', gift_id = gift_id, gift = oldGift, recipients = allRecipients)
 
+# Change gift's status
 @app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/status', methods = ['GET', 'POST'])
 def statusGift(rec_id, gift_id):
+    if 'username' not in login_session:
+        flash('Sorry, you must login before proceeding.')
+        return redirect(url_for('welcome'))
+    thisRecipient = session.query(Recipients).\
+                        filter_by(id = rec_id).first()
+    if thisRecipient.giver_id != login_session['user_id']:
+        flash('Sorry, you are not authorized to edit this gift.')
+        return redirect(url_for('recipients'))
     thisGift = session.query(Gifts).\
-                    filter_by(id = gift_id).one()
+                    filter_by(id = gift_id).first()
     if request.method == 'POST':
         if request.form['status']:
             thisGift.status = request.form['status']
@@ -398,10 +479,19 @@ def statusGift(rec_id, gift_id):
     else:
         return render_template('giftChangeStatus.html', gift = thisGift, rec_id = rec_id, gift_id = gift_id)
 
+# Edit gift's details
 @app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/edit', methods = ['GET', 'POST'])
 def editGift(rec_id, gift_id):
+    if 'username' not in login_session:
+        flash('Sorry, you must login before proceeding.')
+        return redirect(url_for('welcome'))
+    thisRecipient = session.query(Recipients).\
+                        filter_by(id = rec_id).first()
+    if thisRecipient.giver_id != login_session['user_id']:
+        flash('Sorry, you are not authorized to edit this gift.')
+        return redirect(url_for('recipients'))
     thisGift = session.query(Gifts).\
-                    filter_by(id = gift_id).one()
+                    filter_by(id = gift_id).first()
     if request.method == 'POST':
         if request.form['name']:
             thisGift.name = request.form['name']
@@ -422,12 +512,19 @@ def editGift(rec_id, gift_id):
     else:
         return render_template('giftEdit.html', gift = thisGift, rec_id = rec_id, gift_id = gift_id)
 
+# Delete gift
 @app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/delete', methods=['GET', 'POST'])
 def deleteGift(rec_id, gift_id):
+    if 'username' not in login_session:
+        flash('Sorry, you must login before proceeding.')
+        return redirect(url_for('welcome'))
     thisRecipient = session.query(Recipients).\
-                        filter_by(id = rec_id).one()
+                        filter_by(id = rec_id).first()
+    if thisRecipient.giver_id != login_session['user_id']:
+        flash('Sorry, you are not authorized to delete this gift.')
+        return redirect(url_for('recipients'))
     thisGift = session.query(Gifts).\
-                        filter_by(id = gift_id).one()
+                        filter_by(id = gift_id).first()
     if request.method == 'POST':
         session.delete(thisGift)
         session.commit()

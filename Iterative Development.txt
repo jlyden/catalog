@@ -51,3 +51,7 @@ Test after each stage
 
 7. Add styling - CSS, JavaScript, images, message flashing (done), etc
  a. add files to /static folder
+
+8. Add extra credit
+ a. alt API endpoint
+ b. Delete EC - prevent CSRF
