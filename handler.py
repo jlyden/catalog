@@ -1,7 +1,8 @@
 # Runs Flask Application for Gifter Web App
 # written by jennifer lyden for Udacity FullStack Nanodegree
 
-from flask import Flask, render_template, url_for, request, redirect, flash, jsonify, make_response
+from flask import Flask, render_template, url_for, request, redirect
+from flask import flash, jsonify, make_response
 from flask import session as login_session
 from sqlalchemy import create_engine, literal
 from sqlalchemy.orm import sessionmaker
@@ -15,7 +16,7 @@ app = Flask(__name__)
 
 # For Google authentication
 CLIENT_ID = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_id']
+            open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Gifter"
 
 # Database connection setup
@@ -43,13 +44,15 @@ def welcome():
 # State token to prevent request forgery
 @app.route('/login')
 def showLogin():
-    state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+    state = ''.join(random.choice(string.ascii_uppercase +
+                    string.digits) for x in xrange(32))
     login_session['state'] = state
     return render_template('login.html', STATE = state)
 
 @app.route('/register')
 def showRegister():
-    state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+    state = ''.join(random.choice(string.ascii_uppercase +
+                    string.digits) for x in xrange(32))
     login_session['state'] = state
     return render_template('register.html')
 
@@ -70,7 +73,8 @@ def gconnect():
 
     # Check access token is valid
     access_token = credentials.access_token
-    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s' % access_token)
+    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s' \
+            % access_token)
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
     # If there was error in access token info, abort
@@ -152,8 +156,10 @@ def fbconnect():
     access_token = request.data
 
     # Exchange client token for long-lived server-side token
-    app_id = json.loads(open('fb_client_secrets.json', 'r').read())['web']['app_id']
-    app_secret = json.loads(open('fb_client_secrets.json', 'r').read())['web']['app_secret']
+    app_id = json.loads(
+                open('fb_client_secrets.json', 'r').read())['web']['app_id']
+    app_secret = json.loads(
+                open('fb_client_secrets.json', 'r').read())['web']['app_secret']
     url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' % (app_id, app_secret, access_token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
@@ -321,7 +327,8 @@ def editRecipient(rec_id):
         flash("Recipient information changed!")
         return redirect(url_for('recipients'))
     else:
-        return render_template('recipientEdit.html', recipient = thisRecipient, rec_id = rec_id)
+        return render_template('recipientEdit.html',
+                                recipient = thisRecipient, rec_id = rec_id)
 
 # Delete recipient & recipient's gifts
 @app.route('/recipients/<int:rec_id>/delete', methods=['GET', 'POST'])
@@ -347,7 +354,8 @@ def deleteRecipient(rec_id):
         flash("Recipient and gifts deleted!")
         return redirect(url_for('recipients'))
     else:
-        return render_template('recipientDelete.html', recipient = thisRecipient)
+        return render_template('recipientDelete.html',
+                                recipient = thisRecipient)
 
 # Gifts list associated with a particular recipient
 @app.route('/recipients/<int:rec_id>/gifts')
@@ -366,7 +374,8 @@ def gifts(rec_id):
     if not items:
         return render_template('giftsNo.html', recipient = thisRecipient)
     else:
-        return render_template('giftsYes.html', recipient = thisRecipient, gifts = items)
+        return render_template('giftsYes.html',
+                                recipient = thisRecipient, gifts = items)
 
 # See details about particular gift
 @app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>')
@@ -384,7 +393,8 @@ def giftDetails(rec_id, gift_id):
     if not thisGift:
         flash('No such gift!')
         return redirect(url_for('gifts'))
-    return render_template('giftDetails.html', recipient = thisRecipient, gift = thisGift)
+    return render_template('giftDetails.html',
+                            recipient = thisRecipient, gift = thisGift)
 
 # Add a gift for a particular recipient
 @app.route('/recipients/<int:rec_id>/gifts/add', methods=['GET', 'POST'])
@@ -398,7 +408,7 @@ def addGift(rec_id):
         flash('No such recipient!')
         return redirect(url_for('recipients'))
     if thisRecipient.giver_id != login_session['user_id']:
-        flash('Sorry, you are not authorized to add a Gift for this recipient.')
+        flash('''Sorry, you can't add a Gift for this recipient.''')
         return redirect(url_for('recipients'))
     if request.method == 'POST':
         newGift = Gifts(name = request.form['name'],
@@ -416,7 +426,8 @@ def addGift(rec_id):
         flash("New gift added!")
         return redirect(url_for('gifts', rec_id = rec_id))
     else:
-        return render_template('giftAdd.html', recipient = thisRecipient, rec_id = rec_id)
+        return render_template('giftAdd.html',
+                                recipient = thisRecipient, rec_id = rec_id)
 
 # Copy an already registered gift to a different recipient
 @app.route('/recipients/gifts/<int:gift_id>/regive', methods=['GET', 'POST'])
@@ -452,10 +463,13 @@ def regiveGift(gift_id):
         flash("Gift added for a new recipient!")
         return redirect(url_for('gifts', rec_id = newRec.id))
     else:
-        return render_template('giftRegive.html', gift_id = gift_id, gift = oldGift, recipients = allRecipients)
+        return render_template('giftRegive.html',
+                                gift_id = gift_id, gift = oldGift,
+                                recipients = allRecipients)
 
 # Change gift's status
-@app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/status', methods = ['GET', 'POST'])
+@app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/status',
+            methods = ['GET', 'POST'])
 def statusGift(rec_id, gift_id):
     if 'username' not in login_session:
         flash('Sorry, you must login before proceeding.')
@@ -477,10 +491,13 @@ def statusGift(rec_id, gift_id):
         flash("Gift status changed!")
         return redirect(url_for('gifts', rec_id = rec_id, gift_id = gift_id))
     else:
-        return render_template('giftChangeStatus.html', gift = thisGift, rec_id = rec_id, gift_id = gift_id)
+        return render_template('giftChangeStatus.html',
+                                gift = thisGift, rec_id = rec_id,
+                                gift_id = gift_id)
 
 # Edit gift's details
-@app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/edit', methods = ['GET', 'POST'])
+@app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/edit',
+            methods = ['GET', 'POST'])
 def editGift(rec_id, gift_id):
     if 'username' not in login_session:
         flash('Sorry, you must login before proceeding.')
@@ -510,10 +527,12 @@ def editGift(rec_id, gift_id):
         flash("Gift information changed!")
         return redirect(url_for('gifts', rec_id = rec_id, gift_id = gift_id))
     else:
-        return render_template('giftEdit.html', gift = thisGift, rec_id = rec_id, gift_id = gift_id)
+        return render_template('giftEdit.html', gift = thisGift,
+                                rec_id = rec_id, gift_id = gift_id)
 
 # Delete gift
-@app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/delete', methods=['GET', 'POST'])
+@app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/delete',
+            methods=['GET', 'POST'])
 def deleteGift(rec_id, gift_id):
     if 'username' not in login_session:
         flash('Sorry, you must login before proceeding.')
@@ -531,7 +550,9 @@ def deleteGift(rec_id, gift_id):
         flash("Gift deleted!")
         return redirect(url_for('gifts'))
     else:
-        return render_template('giftDelete.html', recipient = thisRecipient, gift = thisGift, rec_id = rec_id, gift_id = gift_id)
+        return render_template('giftDelete.html', recipient = thisRecipient,
+                                gift = thisGift, rec_id = rec_id,
+                                gift_id = gift_id)
 
 
 if __name__ == '__main__':
