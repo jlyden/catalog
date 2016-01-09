@@ -354,12 +354,14 @@ def createGiver(login_session):
     return user_id
 
 
-# User's (Giver's) recipient list
+# Provide user's (giver's) recipient list
 @app.route('/recipients')
 def recipients():
+    # Authorization
     if 'username' not in login_session:
         flash('Sorry, you must login before proceeding.')
         return redirect(url_for('welcome'))
+
     items = session.query(Recipients).\
                 filter_by(giver_id=login_session['user_id']).\
                 order_by(Recipients.name).all()
@@ -369,12 +371,14 @@ def recipients():
         return render_template('recipientsYes.html', recipients=items)
 
 
-# Add recipient
+# Add recipient to database
 @app.route('/recipients/add', methods=['GET', 'POST'])
 def addRecipient():
+    # Authorization
     if 'username' not in login_session:
         flash('Sorry, you must login before proceeding.')
         return redirect(url_for('welcome'))
+
     if request.method == 'POST':
         newRecipient = Recipients(name=request.form['name'],
                                   bday=request.form['bday'],
@@ -388,20 +392,26 @@ def addRecipient():
         return render_template('recipientAdd.html')
 
 
-# Edit recipient
+# Edit recipient in database
 @app.route('/recipients/<int:rec_id>/edit', methods=['GET', 'POST'])
 def editRecipient(rec_id):
+    # Authorization
     if 'username' not in login_session:
         flash('Sorry, you must login before proceeding.')
         return redirect(url_for('welcome'))
+
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
     if not thisRecipient:
         flash('No such recipient!')
         return redirect(url_for('recipients'))
+
+    # Authorization
     if thisRecipient.giver_id != login_session['user_id']:
         flash('Sorry, you are not authorized to edit this recipient.')
         return redirect(url_for('recipients'))
+
+    # Update data as provided
     if request.method == 'POST':
         if request.form['name']:
             thisRecipient.name = request.form['name']
@@ -418,20 +428,26 @@ def editRecipient(rec_id):
                                recipient=thisRecipient, rec_id=rec_id)
 
 
-# Delete recipient & recipient's gifts
+# Delete recipient & recipient's gifts from database
 @app.route('/recipients/<int:rec_id>/delete', methods=['GET', 'POST'])
 def deleteRecipient(rec_id):
+    # Authorization
     if 'username' not in login_session:
         flash('Sorry, you must login before proceeding.')
         return redirect(url_for('welcome'))
+
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
     if not thisRecipient:
         flash('No such recipient!')
         return redirect(url_for('recipients'))
+
+    # Authorization
     if thisRecipient.giver_id != login_session['user_id']:
         flash('Sorry, you are not authorized to delete this recipient.')
         return redirect(url_for('recipients'))
+
+    # Delete recipient and associated gifts
     if request.method == 'POST':
         theirGifts = session.query(Gifts).\
                         filter_by(rec_id=rec_id).all()
@@ -446,12 +462,14 @@ def deleteRecipient(rec_id):
                                recipient=thisRecipient)
 
 
-# Gifts list associated with a particular recipient
+# Provide gifts list associated with a particular recipient
 @app.route('/recipients/<int:rec_id>/gifts')
 def gifts(rec_id):
+    # Authorization
     if 'username' not in login_session:
         flash('Sorry, you must login before proceeding.')
         return redirect(url_for('welcome'))
+
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
     if not thisRecipient:
@@ -470,9 +488,11 @@ def gifts(rec_id):
 # See details about particular gift
 @app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>')
 def giftDetails(rec_id, gift_id):
+    # Authorization
     if 'username' not in login_session:
         flash('Sorry, you must login before proceeding.')
         return redirect(url_for('welcome'))
+
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
     if not thisRecipient:
@@ -490,17 +510,22 @@ def giftDetails(rec_id, gift_id):
 # Add a gift for a particular recipient
 @app.route('/recipients/<int:rec_id>/gifts/add', methods=['GET', 'POST'])
 def addGift(rec_id):
+    # Authorization
     if 'username' not in login_session:
         flash('Sorry, you must login before proceeding.')
         return redirect(url_for('welcome'))
+
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
     if not thisRecipient:
         flash('No such recipient!')
         return redirect(url_for('recipients'))
+
+    # Authorization
     if thisRecipient.giver_id != login_session['user_id']:
         flash('''Sorry, you can't add a Gift for this recipient.''')
         return redirect(url_for('recipients'))
+
     if request.method == 'POST':
         newGift = Gifts(name=request.form['name'],
                         desc=request.form['desc'],
@@ -524,14 +549,18 @@ def addGift(rec_id):
 # Copy an already registered gift to a different recipient
 @app.route('/recipients/gifts/<int:gift_id>/regive', methods=['GET', 'POST'])
 def regiveGift(gift_id):
+    # Authorization
     if 'username' not in login_session:
         flash('Sorry, you must login before proceeding.')
         return redirect(url_for('welcome'))
+
     oldGift = session.query(Gifts).\
                     filter_by(id=gift_id).first()
     if not oldGift:
         flash('No such gift!')
         return redirect(url_for('gifts'))
+
+    # Query available recipients
     giver_id = login_session['user_id']
     allRecipients = session.query(Recipients).\
                         filter_by(giver_id=giver_id).\
@@ -539,6 +568,7 @@ def regiveGift(gift_id):
     if not allRecipients:
         flash('You have no recipients.')
         return redirect(url_for('recipients'))
+
     if request.method == 'POST':
         newRec = session.query(Recipients).\
                         filter_by(name=request.form['newRecipient']).first()
@@ -560,18 +590,24 @@ def regiveGift(gift_id):
                                recipients=allRecipients)
 
 
-# Change gift's status
+# Update gift's status - separated from other gift updates for user ease
 @app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/status',
            methods=['GET', 'POST'])
 def statusGift(rec_id, gift_id):
+    # Authorization
     if 'username' not in login_session:
         flash('Sorry, you must login before proceeding.')
         return redirect(url_for('welcome'))
+
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
+
+    # Authorization
     if thisRecipient.giver_id != login_session['user_id']:
         flash('Sorry, you are not authorized to edit this gift.')
         return redirect(url_for('recipients'))
+
+    # Update status
     thisGift = session.query(Gifts).\
                     filter_by(id=gift_id).first()
     if request.method == 'POST':
@@ -589,20 +625,27 @@ def statusGift(rec_id, gift_id):
                                gift_id=gift_id)
 
 
-# Edit gift's details
+# Update gift's details in database
 @app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/edit',
            methods=['GET', 'POST'])
 def editGift(rec_id, gift_id):
+    # Authorization
     if 'username' not in login_session:
         flash('Sorry, you must login before proceeding.')
         return redirect(url_for('welcome'))
+
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
+
+    # Authorization
     if thisRecipient.giver_id != login_session['user_id']:
         flash('Sorry, you are not authorized to edit this gift.')
         return redirect(url_for('recipients'))
+
     thisGift = session.query(Gifts).\
                     filter_by(id=gift_id).first()
+
+    # Update data as provided
     if request.method == 'POST':
         if request.form['name']:
             thisGift.name = request.form['name']
@@ -625,18 +668,23 @@ def editGift(rec_id, gift_id):
                                rec_id=rec_id, gift_id=gift_id)
 
 
-# Delete gift
+# Delete gift from database
 @app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/delete',
            methods=['GET', 'POST'])
 def deleteGift(rec_id, gift_id):
+    # Authorization
     if 'username' not in login_session:
         flash('Sorry, you must login before proceeding.')
         return redirect(url_for('welcome'))
+
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
+
+    # Authorization
     if thisRecipient.giver_id != login_session['user_id']:
         flash('Sorry, you are not authorized to delete this gift.')
         return redirect(url_for('recipients'))
+
     thisGift = session.query(Gifts).\
                     filter_by(id=gift_id).first()
     if request.method == 'POST':
