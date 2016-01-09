@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+
+  <p>Here are all the gifts you have registered.</p>
+  <p>Click gift name for more information.</p>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th><!-- image --></th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Link</th>
+        <th>Tools</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for g in gifts %}
+        <tr>
+          <td><img src="{{g.image}}" alt="{{g.name}}" style="width:100px;height:100px;"></td>
+          <td><a href="{{url_for('giftDetails', rec_id=recipient.id, gift_id=g.id)}}">{{g.name}}</a></td>
+          <td>{{g.status}}</td>
+          <td><a href="{{g.link}}" target="_blank">{{g.link}}</a></td>
+          <td>None for now</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</div>
+{% endblock %}

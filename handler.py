@@ -462,6 +462,23 @@ def deleteRecipient(rec_id):
                                recipient=thisRecipient)
 
 
+# Provide complete gifts list
+@app.route('/recipients/gifts')
+def allGifts():
+    # Authorization
+    if 'username' not in login_session:
+        flash('Sorry, you must login before proceeding.', 'alert-danger')
+        return redirect(url_for('welcome'))
+
+    items = session.query(Gifts).\
+                filter_by(giver_id=login_session['user_id']).\
+                order_by(Gifts.name).all()
+    if not items:
+        return render_template('giftsNo.html')
+    else:
+        return render_template('giftsAll.html')
+
+
 # Provide gifts list associated with a particular recipient
 @app.route('/recipients/<int:rec_id>/gifts')
 def gifts(rec_id):

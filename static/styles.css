@@ -5,14 +5,30 @@ font-family: 'Poly', serif;
 */
 
 body {
-  margin: 20px 40px 20px 40px;
+  margin: 10px 40px 40px 40px;
+  font-family: 'Poly', serif;
+}
+
+h1.script {
+  font-family: 'Kaushan Script', cursive;
+  display: inline-block;
+}
+
+p.warning {
+  color: red;
 }
 
 .logo {
   height: 100px;
 }
 
-h1.script {
+.littleSpace {
+  padding: 10px;
+}
+
+.footer {
+  padding: 10px;
+  text-align: center;
+  font-size: small;
   font-family: 'Kaushan Script', cursive;
-  display: inline-block;
 }

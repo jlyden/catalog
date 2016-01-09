@@ -1,23 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
+{% include "navRecipients.html" %}
 
-<div class="container">
-  <h1>Welcome Back!</h1>
-  <h3>Here is your current recipient list. ~
-  <a href="{{url_for('addRecipient')}}">Add a recipient</a></h3>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title"><i>Click name to see gifts.</i></h4>
+  </div>
 
-  <table class="table">
+  <table class="table table-hover">
     <thead>
       <tr>
         <th>Name</th>
+        <th>Birthday</th>
         <th>Tools</th>
       </tr>
     </thead>
     <tbody>
       {% for r in recipients %}
         <tr>
-          <td>{{r.name}}</td>
-          <td><a href="{{url_for('gifts', rec_id=r.id)}}">Gifts List</a> ||
+          <td><a href="{{url_for('gifts', rec_id=r.id)}}">{{r.name}}</a></td>
+          <td>{{r.bday}}</td>
+          <td>
             <a href="{{url_for('editRecipient', rec_id=r.id)}}">Edit</a> ||
             <a href="{{url_for('deleteRecipient', rec_id=r.id)}}">Delete</a></td>
         </tr>
@@ -26,5 +29,4 @@
   </table>
 
 </div>
-
 {% endblock %}
