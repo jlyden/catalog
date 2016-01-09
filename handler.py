@@ -34,20 +34,20 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 
-# API Endpoint - JSON
+# API Endpoint - JSON - all recipients
 @app.route('/recipients/JSON')
 def allRecipientsJSON():
     items = session.query(Recipients).order_by(Recipients.id).all()
     return jsonify(AllRecipients=[i.serialize for i in items])
 
-
+# API Endpoint - JSON - all gifts
 @app.route('/gifts/JSON')
 def allGiftsJSON():
     items = session.query(Gifts).order_by(Gifts.id).all()
     return jsonify(AllGifts=[i.serialize for i in items])
 
 
-# API Endpoint - XML
+# API Endpoint - XML - all recipients
 # Help from:
 # https://discussions.udacity.com/t/create-an-additional-api-end-points-in-project-3/27060/3
 # http://stackoverflow.com/questions/29023035/how-to-create-xml-endpoint-in-flask
@@ -55,25 +55,51 @@ def allGiftsJSON():
 def allRecipientsXML():
     items = session.query(Recipients).order_by(Recipients.id).all()
 
+    # Set up XML file
     recipientsXML = Element('allRecipients')
     comment = Comment('XML Response with all Recipients')
     recipientsXML.append(comment)
-
     title = SubElement(recipientsXML, 'title')
     title.text = 'Recipients List'
 
+    # Fill with recipient data
     for i in items:
         thisRecipient = SubElement(recipientsXML, 'thisRecipient')
         thisRecipient.text = i.name
-        recID = SubElement(thisRecipient, 'recID')
-        recID.text = str(i.id)
-        recBday = SubElement(thisRecipient, 'recBday')
-        recBday.text = i.bday
-        recSizes = SubElement(thisRecipient, 'recSizes')
-        recSizes.text = i.sizes
-
-    print tostring(recipientsXML)
+        rec_ID = SubElement(thisRecipient, 'rec_ID')
+        rec_ID.text = str(i.id)
+        bday = SubElement(thisRecipient, 'bday')
+        bday.text = i.bday
+        sizes = SubElement(thisRecipient, 'sizes')
+        sizes.text = i.sizes
     return app.response_class(tostring(recipientsXML), mimetype='application/xml')
+
+
+# API Endpoint - XML - all gifts
+@app.route('/gifts/XML')
+def allGiftsXML():
+    items = session.query(Gifts).order_by(Gifts.id).all()
+
+    # Set up XML file
+    giftsXML = Element('allGifts')
+    comment = Comment('XML Response with all Gifts')
+    giftsXML.append(comment)
+    title = SubElement(giftsXML, 'title')
+    title.text = 'Gifts List'
+
+    # Fill with gift data
+    for i in items:
+        thisGift = SubElement(giftsXML, 'thisGift')
+        thisGift.text = i.name
+        gift_ID = SubElement(thisGift, 'gift_ID')
+        gift_ID.text = str(i.id)
+        desc = SubElement(thisGift, 'desc')
+        desc.text = i.desc
+        link = SubElement(thisGift, 'link')
+        link.text = i.link
+        status = SubElement(thisGift, 'status')
+        status.text = i.status
+    return app.response_class(tostring(giftsXML), mimetype='application/xml')
 
 
 @app.route('/')
@@ -91,6 +117,7 @@ def showLogin():
     return render_template('login.html', STATE=state)
 
 
+# Separate registration page to clarify that provider login creates account
 @app.route('/register')
 def showRegister():
     state = ''.join(random.choice(string.ascii_uppercase +
@@ -102,6 +129,7 @@ def showRegister():
 # Google Sign In functions
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
+    # check state token
     if request.args.get('state') != login_session['state']:
         connectMessage('Invalid state parameter', 401)
     code = request.data
@@ -149,6 +177,7 @@ def gconnect():
     answer = requests.get(userinfo_url, params=params)
     data = answer.json()
 
+    # Set login_session data
     login_session['provider'] = 'google'
     login_session['username'] = data['name']
     login_session['email'] = data['email']
@@ -175,27 +204,10 @@ def gconnect():
     return output
 
 
-# Google disconnect - revoke user's token
-@app.route('/gdisconnect')
-def gdisconnect():
-    # Only disconnect a connected user
-    access_token = login_session.get('credentials')
-    if access_token is None:
-        connectMessage('User not connected.', 401)
-    # Execute HTTP GET request to revoke token
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
-    h = httplib2.Http()
-    result = h.request(url, 'GET')[0]
-    if result['status'] == '200':
-        connectMessage('Successfully disconnected.', 200)
-    else:
-        # For some reason, token was invalid
-        connectMessage('Failed to revoke token for given user.', 400)
-
-
 # Facebook connect
 @app.route('/fbconnect', methods=['POST'])
 def fbconnect():
+    # check state token
     if request.args.get('state') != login_session['state']:
         connectMessage('Invalid state parameter', 401)
     access_token = request.data
@@ -214,11 +226,13 @@ def fbconnect():
     # Strip expire tag from access token
     token = result.split("&")[0]
 
+    # Get user info
     url = 'https://graph.facebook.com/v2.4/me?%s&fields=name,id,email' % token
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
     data = json.loads(result)
 
+    # Set login_session data
     login_session['provider'] = 'facebook'
     login_session['username'] = data['name']
     login_session['email'] = data['email']
@@ -255,17 +269,7 @@ def fbconnect():
     return output
 
 
-# Facebook disconnect
-@app.route('/fbdisconnect')
-def fbdisconnect():
-    facebook_id = login_session['facebook_id']
-    url = 'https://graph.facebook.com/%s/permissions' % facebook_id
-    h = httplib2.Http()
-    result = h.request(url, 'DELETE')[1]
-    return "You have been logged out."
-
-
-# Super disconnect
+# Overall disconnect which invokes provider disconnects
 @app.route('/disconnect')
 def disconnect():
     if 'provider' in login_session:
@@ -291,7 +295,36 @@ def disconnect():
         return redirect(url_for('welcome'))
 
 
-# Helper functions
+# Google disconnect - revoke user's token
+@app.route('/gdisconnect')
+def gdisconnect():
+    # Only disconnect a connected user
+    access_token = login_session.get('credentials')
+    if access_token is None:
+        connectMessage('User not connected.', 401)
+    # Execute HTTP GET request to revoke token
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[0]
+    if result['status'] == '200':
+        connectMessage('Successfully disconnected.', 200)
+    else:
+        # For some reason, token was invalid
+        connectMessage('Failed to revoke token for given user.', 400)
+
+
+# Facebook disconnect
+@app.route('/fbdisconnect')
+def fbdisconnect():
+    # Execute HTTP DELETE request to log out user
+    facebook_id = login_session['facebook_id']
+    url = 'https://graph.facebook.com/%s/permissions' % facebook_id
+    h = httplib2.Http()
+    result = h.request(url, 'DELETE')[1]
+    return "You have been logged out."
+
+
+# Other Helper functions
 def connectMessage(message, code):
         response = make_response(json.dumps(message), code)
         response.headers['Content-Type'] = 'application/json'
