@@ -10,13 +10,13 @@ from flask import session as login_session
 from sqlalchemy import create_engine, literal
 from sqlalchemy.orm import sessionmaker
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
+from xml.etree.ElementTree import Element, SubElement, Comment, tostring, dump
 import random
 import string
 import httplib2
 import json
 import requests
 import datetime
-from datetime import date, timedelta
 from gifter_db import Base, Givers, Recipients, Gifts
 
 
@@ -45,6 +45,35 @@ def allRecipientsJSON():
 def allGiftsJSON():
     items = session.query(Gifts).order_by(Gifts.id).all()
     return jsonify(AllGifts=[i.serialize for i in items])
+
+
+# API Endpoint - XML
+# Help from:
+# https://discussions.udacity.com/t/create-an-additional-api-end-points-in-project-3/27060/3
+# http://stackoverflow.com/questions/29023035/how-to-create-xml-endpoint-in-flask
+@app.route('/recipients/XML')
+def allRecipientsXML():
+    items = session.query(Recipients).order_by(Recipients.id).all()
+
+    recipientsXML = Element('allRecipients')
+    comment = Comment('XML Response with all Recipients')
+    recipientsXML.append(comment)
+
+    title = SubElement(recipientsXML, 'title')
+    title.text = 'Recipients List'
+
+    for i in items:
+        thisRecipient = SubElement(recipientsXML, 'thisRecipient')
+        thisRecipient.text = i.name
+        recID = SubElement(thisRecipient, 'recID')
+        recID.text = str(i.id)
+        recBday = SubElement(thisRecipient, 'recBday')
+        recBday.text = i.bday
+        recSizes = SubElement(thisRecipient, 'recSizes')
+        recSizes.text = i.sizes
+
+    print tostring(recipientsXML)
+    return app.response_class(tostring(recipientsXML), mimetype='application/xml')
 
 
 @app.route('/')

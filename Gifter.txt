@@ -1,3 +1,5 @@
+install xml helper
+
 "feat: Add methods for editR, editG, changeStatus, regive"
 
 Google API Key - AIzaSyAQh2khZON9fYLX8FH4GGr91nTkYIYcEu8
@@ -109,3 +111,46 @@ def allRecipientsXML():
     title.text = 'Recipients List'
     return app.response_class(etree.dump(recipientsXML), mimetype='application/xml')
 
+
+
+    recipientsXML = Element('recipientsXML')
+    title = SubElement(recipientsXML, 'title')
+    title.text = 'Recipients List'
+
+    for i in items:
+        thisRecipient = SubElement(recipientsXML, 'thisRecipient')
+        thisRecipient.text = i.name
+        recID = SubElement(thisRecipient, 'recID')
+        recID.text = str(i.id)
+        recBday = SubElement(thisRecipient, 'recBday')
+        recBday.text = i.bday
+        recSizes = SubElement(thisRecipient, 'recSizes')
+        recSizes.text = i.sizes
+
+#    return Response(recipientsXML, mimetype='application/xml')
+#    return app.response_class(dump(recipientsXML), mimetype='application/xml')
+
+
+
+            'details' : [
+                {'id': i.id},
+                {'bday': i.bday},
+                {'sizes': i.sizes}
+
+
+@app.route('/recipients/XML')
+def allRecipientsXML():
+    items = session.query(Recipients).order_by(Recipients.id).all()
+    allRecipients = {}
+    for i in items:
+        thisRecipient = {
+            'name' : i.name,
+            'details' : [
+                {'id': i.id},
+                {'bday': i.bday},
+                {'sizes': i.sizes},
+            ]}
+        allRecipients.update(thisRecipient)
+
+    print xmlify(allRecipients, wrap="all", indent="    ")
+    return
