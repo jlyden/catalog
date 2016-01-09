@@ -22,8 +22,8 @@
           <td>{{gift.status}}</td>
           <td>{{gift.desc}}</br>
           <a href="{{g.link}}" target="_blank">{{gift.link}}</a></td>
-          <td>{{gift.date_added}}</td>
-          <td>{{gift.date_given}}</td>
+          <td>{{gift.date_added.strftime("%b %d %Y")}}</td>
+          <td>{{gift.date_given.strftime("%b %d %Y")}}</td>
         </tr>
     </tbody>
   </table>

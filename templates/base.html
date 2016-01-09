@@ -14,8 +14,11 @@
     <link href="{{ url_for('static', filename = 'bootstrap.min.css')}}" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
 
+    <!-- Local stylesheet -->
     <link href="{{ url_for('static', filename = 'styles.css')}}" rel="stylesheet">
-
+    <!-- Google Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script|Poly:400,400italic' rel='stylesheet' type='text/css'>
+    <!-- Favicons! -->
     <link rel="icon" type="image/png" href="{{ url_for('static', filename = 'img/favicon-32x32.png')}}" sizes="32x32" />
     <link rel="icon" type="image/png" href="{{ url_for('static', filename = 'img/favicon-16x16.png')}}" sizes="16x16" />
 
@@ -24,22 +27,27 @@
 
   <body>
     <div id="top">
-      <div>
-        <a href="{{url_for('recipients')}}">Back to recipients list</a> || 
-        <a href="{{url_for('disconnect')}}">Log Out</a>
+      <div class="page-header">
+        <span><img class="logo" alt="Gifter logo - a present" src="{{url_for('static', filename='img/present.png')}}" /></span>
+        <h1 class="script">Gifter</h1>
+        <a href="{{url_for('disconnect')}}"><h1 class="script pull-right"><small>Log Out</small></h1></a>
       </div>
-      <div class = 'flash'>
-        {% with messages = get_flashed_messages() %}
+
+      <div class = "alert">
+        {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
-            {% for message in messages %}
-              <p>{{ message }}</p>
+            {% for category, message in messages %}
+              <p class="{{ category }}">{{ message }}</p>
             {% endfor %}
           {% endif %}
         {% endwith %}
-      </div> <!-- /flash -->
-    </div>
+      </div> <!-- /alert -->
+    </div> <!-- /top -->
 
     <div id="middle" class="container">
+      <div>
+        <a href="{{url_for('recipients')}}">Back to recipients list</a> ||
+      </div>
       {% block content %}
       {% endblock %}
     </div>

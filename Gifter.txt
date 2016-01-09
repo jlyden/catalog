@@ -1,7 +1,3 @@
-install xml helper
-
-"feat: Add methods for editR, editG, changeStatus, regive"
-
 Google API Key - AIzaSyAQh2khZON9fYLX8FH4GGr91nTkYIYcEu8
 Client ID - 906905857159-19l8lcp90j3utgq2itj4upgdjtjaaltm.apps.googleusercontent.com
 Client secret - n7MWMYbJdZABT-MgomBQjB2X
@@ -9,13 +5,18 @@ Client secret - n7MWMYbJdZABT-MgomBQjB2X
 Facebook - appId - 675385429230619
 client secret - f0a019b8de258353834bf3b861933e3e
 
+storing secrets: https://exploreflask.com/configuration.html
+upload files instead of just storing names - http://flask.pocoo.org/docs/0.10/patterns/fileuploads/
+ - https://discussions.udacity.com/t/project-3-images-extra-credit/16568
+ - where to store - https://api.imgur.com/
+
+organizing a large app - https://github.com/mitsuhiko/flask/wiki/Large-app-how-to
 
 Amazon - "data-old-hires="http://ecx.images-amazon.com/images/"...
 
 TODO -
 * add link to return to gift list
 * add links (edit, change status) to gift details page
-* change format of date display
 * add redirect after login
 * add comment about patience to login & register page
 * set up register page
@@ -99,58 +100,3 @@ gift = {'id':'1', 'recipient_id':'1', 'name':'Fiorentina Scarf', 'description':'
 'link':'http://www.amazon.com/Fiorentina-Womens-Oversized-Plaid-Fringe/dp/B00TV4CF36/ref=sr_1_7', 
 'status': 'idea'}
 
-
-# API Endpoint - XML
-# help from: http://stackoverflow.com/questions/29023035/how-to-create-xml-endpoint-in-flask
-# and: http://www.diveintopython3.net/xml.html#xml-generate
-@app.route('/recipients/XML')
-def allRecipientsXML():
-    recipientsXML = etree.Element('root', attrib={'{root}lang': 'en'})
-    # add data
-    title = etree.SubElement(recipientsXML, 'title', attrib={'type':'html'})
-    title.text = 'Recipients List'
-    return app.response_class(etree.dump(recipientsXML), mimetype='application/xml')
-
-
-
-    recipientsXML = Element('recipientsXML')
-    title = SubElement(recipientsXML, 'title')
-    title.text = 'Recipients List'
-
-    for i in items:
-        thisRecipient = SubElement(recipientsXML, 'thisRecipient')
-        thisRecipient.text = i.name
-        recID = SubElement(thisRecipient, 'recID')
-        recID.text = str(i.id)
-        recBday = SubElement(thisRecipient, 'recBday')
-        recBday.text = i.bday
-        recSizes = SubElement(thisRecipient, 'recSizes')
-        recSizes.text = i.sizes
-
-#    return Response(recipientsXML, mimetype='application/xml')
-#    return app.response_class(dump(recipientsXML), mimetype='application/xml')
-
-
-
-            'details' : [
-                {'id': i.id},
-                {'bday': i.bday},
-                {'sizes': i.sizes}
-
-
-@app.route('/recipients/XML')
-def allRecipientsXML():
-    items = session.query(Recipients).order_by(Recipients.id).all()
-    allRecipients = {}
-    for i in items:
-        thisRecipient = {
-            'name' : i.name,
-            'details' : [
-                {'id': i.id},
-                {'bday': i.bday},
-                {'sizes': i.sizes},
-            ]}
-        allRecipients.update(thisRecipient)
-
-    print xmlify(allRecipients, wrap="all", indent="    ")
-    return

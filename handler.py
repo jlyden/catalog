@@ -199,7 +199,7 @@ def gconnect():
     output += login_session['picture']
     output += '" style = "width: 150px; height 150px; border-radius: 75px;'
     output += ' -webkit-border-radius: 75px; -moz-border-radius: 75px;">'
-    flash("You are now logged in as %s" % login_session['username'])
+    flash("You are now logged in as %s" % login_session['username'], 'alert-info')
     print "Login complete!"
     return output
 
@@ -264,7 +264,7 @@ def fbconnect():
     output += login_session['picture']
     output += '" style = "width: 150px; height 150px; border-radius: 75px;'
     output += ' -webkit-border-radius: 75px; -moz-border-radius: 75px;">'
-    flash("You are now logged in as %s" % login_session['username'])
+    flash("You are now logged in as %s" % login_session['username'], 'alert-info')
     print "Login complete!"
     return output
 
@@ -288,10 +288,10 @@ def disconnect():
         del login_session['picture']
         del login_session['user_id']
         del login_session['provider']
-        flash("You have successfully logged out.")
+        flash("You have successfully logged out.", 'alert-info')
         return redirect(url_for('welcome'))
     else:
-        flash("You were not logged in!")
+        flash("You were not logged in!", 'alert-info')
         return redirect(url_for('welcome'))
 
 
@@ -359,7 +359,7 @@ def createGiver(login_session):
 def recipients():
     # Authorization
     if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.')
+        flash('Sorry, you must login before proceeding.', 'alert-danger')
         return redirect(url_for('welcome'))
 
     items = session.query(Recipients).\
@@ -376,7 +376,7 @@ def recipients():
 def addRecipient():
     # Authorization
     if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.')
+        flash('Sorry, you must login before proceeding.', 'alert-danger')
         return redirect(url_for('welcome'))
 
     if request.method == 'POST':
@@ -386,7 +386,7 @@ def addRecipient():
                                   giver_id=login_session['user_id'])
         session.add(newRecipient)
         session.commit()
-        flash("New recipient added!")
+        flash("New recipient added!", 'alert-info')
         return redirect(url_for('recipients'))
     else:
         return render_template('recipientAdd.html')
@@ -397,18 +397,18 @@ def addRecipient():
 def editRecipient(rec_id):
     # Authorization
     if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.')
+        flash('Sorry, you must login before proceeding.', 'alert-danger')
         return redirect(url_for('welcome'))
 
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
     if not thisRecipient:
-        flash('No such recipient!')
+        flash('No such recipient!', 'alert-warning')
         return redirect(url_for('recipients'))
 
     # Authorization
     if thisRecipient.giver_id != login_session['user_id']:
-        flash('Sorry, you are not authorized to edit this recipient.')
+        flash('Sorry, you are not authorized to edit this recipient.', 'alert-danger')
         return redirect(url_for('recipients'))
 
     # Update data as provided
@@ -421,7 +421,7 @@ def editRecipient(rec_id):
             thisRecipient.sizes = request.form['sizes']
         session.add(thisRecipient)
         session.commit()
-        flash("Recipient information changed!")
+        flash("Recipient information changed!", 'alert-info')
         return redirect(url_for('recipients'))
     else:
         return render_template('recipientEdit.html',
@@ -433,18 +433,18 @@ def editRecipient(rec_id):
 def deleteRecipient(rec_id):
     # Authorization
     if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.')
+        flash('Sorry, you must login before proceeding.', 'alert-danger')
         return redirect(url_for('welcome'))
 
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
     if not thisRecipient:
-        flash('No such recipient!')
+        flash('No such recipient!', 'alert-warning')
         return redirect(url_for('recipients'))
 
     # Authorization
     if thisRecipient.giver_id != login_session['user_id']:
-        flash('Sorry, you are not authorized to delete this recipient.')
+        flash('Sorry, you are not authorized to delete this recipient.', 'alert-danger')
         return redirect(url_for('recipients'))
 
     # Delete recipient and associated gifts
@@ -455,7 +455,7 @@ def deleteRecipient(rec_id):
             session.delete(g)
         session.delete(thisRecipient)
         session.commit()
-        flash("Recipient and gifts deleted!")
+        flash("Recipient and gifts deleted!", 'alert-info')
         return redirect(url_for('recipients'))
     else:
         return render_template('recipientDelete.html',
@@ -467,13 +467,13 @@ def deleteRecipient(rec_id):
 def gifts(rec_id):
     # Authorization
     if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.')
+        flash('Sorry, you must login before proceeding.', 'alert-danger')
         return redirect(url_for('welcome'))
 
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
     if not thisRecipient:
-        flash('No such recipient!')
+        flash('No such recipient!', 'alert-warning')
         return redirect(url_for('recipients'))
     items = session.query(Gifts).\
                 filter_by(rec_id=rec_id).\
@@ -490,18 +490,18 @@ def gifts(rec_id):
 def giftDetails(rec_id, gift_id):
     # Authorization
     if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.')
+        flash('Sorry, you must login before proceeding.', 'alert-danger')
         return redirect(url_for('welcome'))
 
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
     if not thisRecipient:
-        flash('No such recipient!')
+        flash('No such recipient!', 'alert-warning')
         return redirect(url_for('recipients'))
     thisGift = session.query(Gifts).\
                     filter_by(id=gift_id).first()
     if not thisGift:
-        flash('No such gift!')
+        flash('No such gift!', 'alert-warning')
         return redirect(url_for('gifts'))
     return render_template('giftDetails.html',
                            recipient=thisRecipient, gift=thisGift)
@@ -512,18 +512,19 @@ def giftDetails(rec_id, gift_id):
 def addGift(rec_id):
     # Authorization
     if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.')
+        flash('Sorry, you must login before proceeding.', 'alert-danger')
         return redirect(url_for('welcome'))
 
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
     if not thisRecipient:
-        flash('No such recipient!')
+        flash('No such recipient!', 'alert-warning')
         return redirect(url_for('recipients'))
 
     # Authorization
     if thisRecipient.giver_id != login_session['user_id']:
-        flash('''Sorry, you can't add a Gift for this recipient.''')
+        flash('''Sorry, you can't add a Gift for this recipient.''',
+              'alert-danger')
         return redirect(url_for('recipients'))
 
     if request.method == 'POST':
@@ -539,7 +540,7 @@ def addGift(rec_id):
             newGift.date_given = date.today()
         session.add(newGift)
         session.commit()
-        flash("New gift added!")
+        flash("New gift added!", 'alert-info')
         return redirect(url_for('gifts', rec_id=rec_id))
     else:
         return render_template('giftAdd.html',
@@ -551,13 +552,13 @@ def addGift(rec_id):
 def regiveGift(gift_id):
     # Authorization
     if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.')
+        flash('Sorry, you must login before proceeding.', 'alert-danger')
         return redirect(url_for('welcome'))
 
     oldGift = session.query(Gifts).\
                     filter_by(id=gift_id).first()
     if not oldGift:
-        flash('No such gift!')
+        flash('No such gift!', 'alert-warning')
         return redirect(url_for('gifts'))
 
     # Query available recipients
@@ -566,7 +567,7 @@ def regiveGift(gift_id):
                         filter_by(giver_id=giver_id).\
                         order_by(Recipients.name).all()
     if not allRecipients:
-        flash('You have no recipients.')
+        flash('You have no recipients.', 'alert-warning')
         return redirect(url_for('recipients'))
 
     if request.method == 'POST':
@@ -582,7 +583,7 @@ def regiveGift(gift_id):
                         rec_id=newRec.id)
         session.add(newGift)
         session.commit()
-        flash("Gift added for a new recipient!")
+        flash("Gift added for a new recipient!", 'alert-info')
         return redirect(url_for('gifts', rec_id=newRec.id))
     else:
         return render_template('giftRegive.html',
@@ -596,7 +597,7 @@ def regiveGift(gift_id):
 def statusGift(rec_id, gift_id):
     # Authorization
     if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.')
+        flash('Sorry, you must login before proceeding.', 'alert-danger')
         return redirect(url_for('welcome'))
 
     thisRecipient = session.query(Recipients).\
@@ -604,7 +605,7 @@ def statusGift(rec_id, gift_id):
 
     # Authorization
     if thisRecipient.giver_id != login_session['user_id']:
-        flash('Sorry, you are not authorized to edit this gift.')
+        flash('Sorry, you are not authorized to edit this gift.', 'alert-danger')
         return redirect(url_for('recipients'))
 
     # Update status
@@ -617,7 +618,7 @@ def statusGift(rec_id, gift_id):
                 thisGift.date_given = date.today()
         session.add(thisGift)
         session.commit()
-        flash("Gift status changed!")
+        flash("Gift status changed!", 'alert-info')
         return redirect(url_for('gifts', rec_id=rec_id, gift_id=gift_id))
     else:
         return render_template('giftChangeStatus.html',
@@ -631,7 +632,7 @@ def statusGift(rec_id, gift_id):
 def editGift(rec_id, gift_id):
     # Authorization
     if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.')
+        flash('Sorry, you must login before proceeding.', 'alert-danger')
         return redirect(url_for('welcome'))
 
     thisRecipient = session.query(Recipients).\
@@ -639,7 +640,7 @@ def editGift(rec_id, gift_id):
 
     # Authorization
     if thisRecipient.giver_id != login_session['user_id']:
-        flash('Sorry, you are not authorized to edit this gift.')
+        flash('Sorry, you are not authorized to edit this gift.', 'alert-danger')
         return redirect(url_for('recipients'))
 
     thisGift = session.query(Gifts).\
@@ -661,7 +662,7 @@ def editGift(rec_id, gift_id):
                 thisGift.date_given = date.today()
         session.add(thisGift)
         session.commit()
-        flash("Gift information changed!")
+        flash("Gift information changed!", 'alert-info')
         return redirect(url_for('gifts', rec_id=rec_id, gift_id=gift_id))
     else:
         return render_template('giftEdit.html', gift=thisGift,
@@ -674,7 +675,7 @@ def editGift(rec_id, gift_id):
 def deleteGift(rec_id, gift_id):
     # Authorization
     if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.')
+        flash('Sorry, you must login before proceeding.', 'alert-danger')
         return redirect(url_for('welcome'))
 
     thisRecipient = session.query(Recipients).\
@@ -682,7 +683,7 @@ def deleteGift(rec_id, gift_id):
 
     # Authorization
     if thisRecipient.giver_id != login_session['user_id']:
-        flash('Sorry, you are not authorized to delete this gift.')
+        flash('Sorry, you are not authorized to delete this gift.', 'alert-danger')
         return redirect(url_for('recipients'))
 
     thisGift = session.query(Gifts).\
@@ -690,7 +691,7 @@ def deleteGift(rec_id, gift_id):
     if request.method == 'POST':
         session.delete(thisGift)
         session.commit()
-        flash("Gift deleted!")
+        flash("Gift deleted!", 'alert-info')
         return redirect(url_for('gifts'))
     else:
         return render_template('giftDelete.html', recipient=thisRecipient,

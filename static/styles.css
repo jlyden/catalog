@@ -1,0 +1,18 @@
+/* special fonts */
+/*
+font-family: 'Kaushan Script', cursive;
+font-family: 'Poly', serif;
+*/
+
+body {
+  margin: 20px 40px 20px 40px;
+}
+
+.logo {
+  height: 100px;
+}
+
+h1.script {
+  font-family: 'Kaushan Script', cursive;
+  display: inline-block;
+}

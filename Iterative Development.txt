@@ -53,5 +53,4 @@ Test after each stage
  a. add files to /static folder
 
 8. Add extra credit
- a. alt API endpoint
- b. Delete EC - prevent CSRF
+ b. Delete EC - prevent CSRF - WTF forms
