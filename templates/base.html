@@ -25,7 +25,8 @@
   <body>
     <div id="top">
       <div>
-        <a href={{url_for('recipients')}}>Back to recipients list</a>
+        <a href="{{url_for('recipients')}}">Back to recipients list</a> || 
+        <a href="{{url_for('disconnect')}}">Log Out</a>
       </div>
       <div class = 'flash'>
         {% with messages = get_flashed_messages() %}
