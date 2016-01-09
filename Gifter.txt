@@ -8,6 +8,8 @@ Facebook - appId - 675385429230619
 client secret - f0a019b8de258353834bf3b861933e3e
 
 
+Amazon - "data-old-hires="http://ecx.images-amazon.com/images/"...
+
 TODO -
 * add link to return to gift list
 * add links (edit, change status) to gift details page
@@ -16,6 +18,8 @@ TODO -
 * add comment about patience to login & register page
 * set up register page
 * set up welcome page
+* add Demo User
+* add 0.0.0.0:5000 as authorized url
 
 Gifter -> www.gifter.com [or something]
 

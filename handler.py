@@ -1,5 +1,8 @@
 # Runs Flask Application for Gifter Web App
 # written by jennifer lyden for Udacity FullStack Nanodegree
+#
+# Errors in PEP8 check involve urls which break line length limits
+# and indentation for session.query(), both of which I left for readability
 
 from flask import Flask, render_template, url_for, request, redirect
 from flask import flash, jsonify, make_response
@@ -7,7 +10,12 @@ from flask import session as login_session
 from sqlalchemy import create_engine, literal
 from sqlalchemy.orm import sessionmaker
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
-import datetime, random, string, httplib2, json, requests
+import random
+import string
+import httplib2
+import json
+import requests
+import datetime
 from datetime import date, timedelta
 from gifter_db import Base, Givers, Recipients, Gifts
 
@@ -80,7 +88,7 @@ def gconnect():
     # Check access token is valid
     access_token = credentials.access_token
     url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
-            % access_token)
+           % access_token)
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
     # If there was error in access token info, abort
@@ -276,8 +284,8 @@ def getGiverInfo(user_id):
 
 def createGiver(login_session):
     newGiver = Givers(name=login_session['username'],
-                    email=login_session['email'],
-                    picture=login_session['picture'])
+                      email=login_session['email'],
+                      picture=login_session['picture'])
     session.add(newGiver)
     session.commit()
     user_id = getGiverID(login_session['email'])
@@ -291,8 +299,8 @@ def recipients():
         flash('Sorry, you must login before proceeding.')
         return redirect(url_for('welcome'))
     items = session.query(Recipients).\
-                    filter_by(giver_id=login_session['user_id']).\
-                    order_by(Recipients.name).all()
+                filter_by(giver_id=login_session['user_id']).\
+                order_by(Recipients.name).all()
     if not items:
         return render_template('recipientsNo.html')
     else:
@@ -307,9 +315,9 @@ def addRecipient():
         return redirect(url_for('welcome'))
     if request.method == 'POST':
         newRecipient = Recipients(name=request.form['name'],
-                        bday=request.form['bday'],
-                        sizes=request.form['sizes'],
-                        giver_id=login_session['user_id'])
+                                  bday=request.form['bday'],
+                                  sizes=request.form['sizes'],
+                                  giver_id=login_session['user_id'])
         session.add(newRecipient)
         session.commit()
         flash("New recipient added!")
@@ -345,7 +353,7 @@ def editRecipient(rec_id):
         return redirect(url_for('recipients'))
     else:
         return render_template('recipientEdit.html',
-                                recipient=thisRecipient, rec_id=rec_id)
+                               recipient=thisRecipient, rec_id=rec_id)
 
 
 # Delete recipient & recipient's gifts
@@ -373,7 +381,7 @@ def deleteRecipient(rec_id):
         return redirect(url_for('recipients'))
     else:
         return render_template('recipientDelete.html',
-                                recipient=thisRecipient)
+                               recipient=thisRecipient)
 
 
 # Gifts list associated with a particular recipient
@@ -383,18 +391,18 @@ def gifts(rec_id):
         flash('Sorry, you must login before proceeding.')
         return redirect(url_for('welcome'))
     thisRecipient = session.query(Recipients).\
-                    filter_by(id=rec_id).first()
+                        filter_by(id=rec_id).first()
     if not thisRecipient:
         flash('No such recipient!')
         return redirect(url_for('recipients'))
     items = session.query(Gifts).\
-                    filter_by(rec_id=rec_id).\
-                    order_by(Gifts.name).all()
+                filter_by(rec_id=rec_id).\
+                order_by(Gifts.name).all()
     if not items:
         return render_template('giftsNo.html', recipient=thisRecipient)
     else:
         return render_template('giftsYes.html',
-                                recipient=thisRecipient, gifts=items)
+                               recipient=thisRecipient, gifts=items)
 
 
 # See details about particular gift
@@ -404,7 +412,7 @@ def giftDetails(rec_id, gift_id):
         flash('Sorry, you must login before proceeding.')
         return redirect(url_for('welcome'))
     thisRecipient = session.query(Recipients).\
-                    filter_by(id=rec_id).first()
+                        filter_by(id=rec_id).first()
     if not thisRecipient:
         flash('No such recipient!')
         return redirect(url_for('recipients'))
@@ -414,7 +422,7 @@ def giftDetails(rec_id, gift_id):
         flash('No such gift!')
         return redirect(url_for('gifts'))
     return render_template('giftDetails.html',
-                            recipient=thisRecipient, gift=thisGift)
+                           recipient=thisRecipient, gift=thisGift)
 
 
 # Add a gift for a particular recipient
@@ -448,7 +456,7 @@ def addGift(rec_id):
         return redirect(url_for('gifts', rec_id=rec_id))
     else:
         return render_template('giftAdd.html',
-                                recipient=thisRecipient, rec_id=rec_id)
+                               recipient=thisRecipient, rec_id=rec_id)
 
 
 # Copy an already registered gift to a different recipient
@@ -458,7 +466,7 @@ def regiveGift(gift_id):
         flash('Sorry, you must login before proceeding.')
         return redirect(url_for('welcome'))
     oldGift = session.query(Gifts).\
-                        filter_by(id=gift_id).first()
+                    filter_by(id=gift_id).first()
     if not oldGift:
         flash('No such gift!')
         return redirect(url_for('gifts'))
@@ -486,13 +494,13 @@ def regiveGift(gift_id):
         return redirect(url_for('gifts', rec_id=newRec.id))
     else:
         return render_template('giftRegive.html',
-                                gift_id=gift_id, gift=oldGift,
-                                recipients=allRecipients)
+                               gift_id=gift_id, gift=oldGift,
+                               recipients=allRecipients)
 
 
 # Change gift's status
 @app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/status',
-            methods=['GET', 'POST'])
+           methods=['GET', 'POST'])
 def statusGift(rec_id, gift_id):
     if 'username' not in login_session:
         flash('Sorry, you must login before proceeding.')
@@ -515,13 +523,13 @@ def statusGift(rec_id, gift_id):
         return redirect(url_for('gifts', rec_id=rec_id, gift_id=gift_id))
     else:
         return render_template('giftChangeStatus.html',
-                                gift=thisGift, rec_id=rec_id,
-                                gift_id=gift_id)
+                               gift=thisGift, rec_id=rec_id,
+                               gift_id=gift_id)
 
 
 # Edit gift's details
 @app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/edit',
-            methods=['GET', 'POST'])
+           methods=['GET', 'POST'])
 def editGift(rec_id, gift_id):
     if 'username' not in login_session:
         flash('Sorry, you must login before proceeding.')
@@ -552,12 +560,12 @@ def editGift(rec_id, gift_id):
         return redirect(url_for('gifts', rec_id=rec_id, gift_id=gift_id))
     else:
         return render_template('giftEdit.html', gift=thisGift,
-                                rec_id=rec_id, gift_id=gift_id)
+                               rec_id=rec_id, gift_id=gift_id)
 
 
 # Delete gift
 @app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/delete',
-            methods=['GET', 'POST'])
+           methods=['GET', 'POST'])
 def deleteGift(rec_id, gift_id):
     if 'username' not in login_session:
         flash('Sorry, you must login before proceeding.')
@@ -568,7 +576,7 @@ def deleteGift(rec_id, gift_id):
         flash('Sorry, you are not authorized to delete this gift.')
         return redirect(url_for('recipients'))
     thisGift = session.query(Gifts).\
-                        filter_by(id=gift_id).first()
+                    filter_by(id=gift_id).first()
     if request.method == 'POST':
         session.delete(thisGift)
         session.commit()
@@ -576,8 +584,8 @@ def deleteGift(rec_id, gift_id):
         return redirect(url_for('gifts'))
     else:
         return render_template('giftDelete.html', recipient=thisRecipient,
-                                gift=thisGift, rec_id=rec_id,
-                                gift_id=gift_id)
+                               gift=thisGift, rec_id=rec_id,
+                               gift_id=gift_id)
 
 
 if __name__ == '__main__':
