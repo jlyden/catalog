@@ -5,7 +5,10 @@ font-family: 'Poly', serif;
 */
 
 body {
-  margin: 10px 40px 40px 40px;
+  margin: 20px;
+  margin-top: 0px;
+  padding: 20px;
+  padding-top: 0px;
   font-family: 'Poly', serif;
 }
 
@@ -15,6 +18,10 @@ h1.script {
 }
 
 p.warning {
+  color: red;
+}
+
+.warning {
   color: red;
 }
 

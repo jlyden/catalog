@@ -1,4 +1,5 @@
-        <a href="{{url_for('recipients')}}">Back to recipients list</a> ||
+* check delete gift error
+
 
 
 Google API Key - AIzaSyAQh2khZON9fYLX8FH4GGr91nTkYIYcEu8
@@ -22,10 +23,11 @@ TODO -
 * add links (edit, change status) to gift details page
 * add redirect after login
 * add comment about patience to login & register page
-* set up register page
-* set up welcome page
 * add Demo User
 * add 0.0.0.0:5000 as authorized url
+* default gift image (package logo) if no image/url stored
+* create contact form
+* add js(?) hide div to login/registration pages
 
 Gifter -> www.gifter.com [or something]
 
