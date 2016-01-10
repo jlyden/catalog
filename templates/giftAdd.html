@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
+<nav>
+  <ul class="nav nav-tabs">
+    <li role="presentation" class="menu"><a href="{{url_for('recipients')}}">Recipients</a></li>
+    <li role="presentation" class="menu"><a href="{{url_for('addRecipient')}}">Add Recipient</a></li>
+    <li role="presentation" class="menu"><a href="{{url_for('allGifts')}}">Gifts</a></li>
+    <li role="presentation" class="active menu"><a href="#">Add Gift</a></li>
+  </ul>
+</nav>
 
 <div>
   <h1>Add a gift for {{ recipient.name }}</h1>

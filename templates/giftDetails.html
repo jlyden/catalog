@@ -1,34 +1,40 @@
 {% extends "base.html" %}
 {% block content %}
-<!--{% include "navGift.html" %}-->
+{% include "navGifts.html" %}
 
-<div>
-  <h1>Gift Details for {{recipient.name}}</h1>
-
-  <table class="table">
-    <thead>
-      <tr>
-        <th><!-- image --></th>
-        <th>Name</th>
-        <th>Status</th>
-        <th>Desc</th>
-        <th>Date Added</th>
-        <th>Date Given</th>
-      </tr>
-    </thead>
-    <tbody>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><i>Details for {{recipient.name}}'s {{gift.name}}</i></h4>
+  </div>
+  <div class="panel-body">
+    <table class="table">
+      <thead>
         <tr>
-          <td><img src="{{gift.image}}" alt="{{gift.name}}" style="width:100px;height:100px;"></td>
-          <td>{{gift.name}}</td>
-          <td>{{gift.status}}</td>
-          <td>{{gift.desc}}</br>
-          <a href="{{g.link}}" target="_blank">{{gift.link}}</a></td>
-          <td>{{gift.date_added.strftime("%b %d %Y")}}</td>
-          <td>{{gift.date_given.strftime("%b %d %Y")}}</td>
+          <th><!-- image --></th>
+          <th>Name</th>
+          <th>Status</th>
+          <th>Description</th>
+          <th>Date Added</th>
+          <th>Date Given</th>
         </tr>
-    </tbody>
-  </table>
-
+      </thead>
+      <tbody>
+          <tr>
+            <td><img src="{{gift.image}}" alt="{{gift.name}}" style="width:100px;height:100px;"></td>
+            <td>{{gift.name}}</td>
+            <td>{{gift.status}}</td>
+            <td>{{gift.desc}}</br>
+            <a href="{{g.link}}" target="_blank">{{gift.link}}</a></td>
+            <td>{{gift.date_added.strftime("%b %d %Y")}}</td>
+            <td>
+              {% if gift.date_given %}
+                {{gift.date_given.strftime("%b %d %Y")}}
+              {% endif %}
+            </td>
+          </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 {% endblock %}

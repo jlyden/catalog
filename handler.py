@@ -17,6 +17,7 @@ import httplib2
 import json
 import requests
 import datetime
+from datetime import date
 from gifter_db import Base, Givers, Recipients, Gifts
 
 
@@ -524,6 +525,31 @@ def giftDetails(rec_id, gift_id):
                            recipient=thisRecipient, gift=thisGift)
 
 
+# Tool to select recipient when adding gift
+@app.route('/recipients/gifts/pick', methods=['GET', 'POST'])
+def pickRec():
+    # Authorization
+    if 'username' not in login_session:
+        flash('Sorry, you must login before proceeding.', 'alert-danger')
+        return redirect(url_for('welcome'))
+
+    if request.method == 'POST':
+        newRec = session.query(Recipients).\
+                        filter_by(name=request.form['newRecipient']).first()
+        return redirect(url_for('addGift', rec_id=newRec.id))
+    else:
+        # Query available recipients
+        giver_id = login_session['user_id']
+        allRecipients = session.query(Recipients).\
+                            filter_by(giver_id=giver_id).\
+                            order_by(Recipients.name).all()
+        if not allRecipients:
+            flash('You have no recipients.', 'alert-warning')
+            return redirect(url_for('newRec'))
+        return render_template('recipientPick.html',
+                               giver_id=giver_id, recipients=allRecipients)
+
+
 # Add a gift for a particular recipient
 @app.route('/recipients/<int:rec_id>/gifts/add', methods=['GET', 'POST'])
 def addGift(rec_id):
@@ -709,7 +735,7 @@ def deleteGift(rec_id, gift_id):
         session.delete(thisGift)
         session.commit()
         flash("Gift deleted!", 'alert-info')
-        return redirect(url_for('gifts'))
+        return redirect(url_for('gifts', rec_id=rec_id))
     else:
         return render_template('giftDelete.html', recipient=thisRecipient,
                                gift=thisGift, rec_id=rec_id,

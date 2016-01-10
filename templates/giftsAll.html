@@ -1,12 +1,42 @@
 {% extends "base.html" %}
 {% block content %}
+{% include "navGifts.html" %}
 
-  <p>Here are all the gifts you have registered.</p>
-  <p>Click gift name for more information.</p>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><i>All Gifts ~ click gift name to see details.</i>
+    <a href="{{url_for('pickRec')}}" class="btn btn-md btn-success pull-right">Add Gift</a></h4>
+  </div>
 
-  <table class="table">
+  <table class="table table-hover">
     <thead>
       <tr>
+        <th><!-- image --></th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Tools</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for g in gifts %}
+        <tr>
+          <td><img src="{{g.image}}" alt="{{g.name}}" style="width:100px;height:100px;"></td>
+          <td><a href="{{url_for('giftDetails', rec_id=recipient.id, gift_id=g.id)}}">{{g.name}}</a></td>
+          <td>{{g.status}}</td>
+          <td>
+            <div class="btn-group" role="group" aria-label="...">
+              <a href="{{url_for('statusGift', rec_id=recipient.id, gift_id=g.id)}}" class="btn btn-md btn-default">Change Status</a>
+              <a href="{{url_for('regiveGift', gift_id=g.id)}}" class="btn btn-md btn-default">Give to another</a>
+              <a href="{{url_for('editGift', rec_id=recipient.id, gift_id=g.id)}}" class="btn btn-md btn-default">Edit</a>
+              <a href="{{url_for('deleteGift', rec_id=recipient.id, gift_id=g.id)}}" class="btn btn-md btn-default">Delete</a>
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
         <th><!-- image --></th>
         <th>Name</th>
         <th>Status</th>

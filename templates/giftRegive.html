@@ -1,41 +1,44 @@
 {% extends "base.html" %}
 {% block content %}
+{% include "navGifts.html" %}
 
-<div>
-  <h1>Assign this gift to another Recipient</h1>
-  <p>This action does NOT remove the gift from the original recipient.</p>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><i>Copy gift to another recipient</i></h4>
+  </div>
+  <div class="panel-body">
+    <p>This action does NOT remove the gift from the original recipient.</p>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th><!-- image --></th>
-        <th>Name</th>
-        <th>Status</th>
-        <th>Link</th>
-      </tr>
-    </thead>
-    <tbody>
+    <table class="table">
+      <thead>
         <tr>
-          <td><img src="{{gift.image}}" alt="{{gift.name}}" style="width:100px;height:100px;"></td>
-          <td>{{gift.name}}</td>
-          <td>{{gift.status}}</td>
-          <td><a href="{{g.link}}" target="_blank">{{gift.link}}</a></td>
+          <th><!-- image --></th>
+          <th>Name</th>
+          <th>Status</th>
+          <th>Link</th>
         </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr>
+            <td><img src="{{gift.image}}" alt="{{gift.name}}" style="width:100px;height:100px;"></td>
+            <td>{{gift.name}}</td>
+            <td>{{gift.status}}</td>
+            <td><a href="{{g.link}}" target="_blank">{{gift.link}}</a></td>
+          </tr>
+      </tbody>
+    </table>
 
-  <form action = "{{url_for('regiveGift', gift_id=gift_id)}}" method = 'POST'>
-  <fieldset class="form-group">
-    <label for="newRecipient">New Recipient</label>
-    <select name="newRecipient">
-      {% for r in recipients %}
-      <option value="{{r.name}}">{{r.name}}</option>
-      {% endfor %}
-    </select>
-  </fieldset>
-  <input type="submit" class="btn btn-default" value = "Give">
-  <a class="btn btn-default" onclick="goBack()">Cancel</a>
-
+    <form action = "{{url_for('regiveGift', gift_id=gift_id)}}" method = 'POST'>
+    <fieldset class="form-group">
+      <label for="newRecipient">New Recipient</label>
+      <select name="newRecipient">
+        {% for r in recipients %}
+        <option value="{{r.name}}">{{r.name}}</option>
+        {% endfor %}
+      </select>
+    </fieldset>
+    <input type="submit" class="btn btn-md btn-success" value = "Give">
+    <a class="btn btn-md btn-danger" onclick="goBack()">Cancel</a>
+  </div>
 </div>
-
 {% endblock %}

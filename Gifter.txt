@@ -18,11 +18,13 @@ organizing a large app - https://github.com/mitsuhiko/flask/wiki/Large-app-how-t
 
 Amazon - "data-old-hires="http://ecx.images-amazon.com/images/"...
 
+
 TODO -
+* button "logout"
+* all gifts list - back end and front end
 * add link to return to gift list
 * add links (edit, change status) to gift details page
 * add redirect after login
-* add comment about patience to login & register page
 * add Demo User
 * add 0.0.0.0:5000 as authorized url
 * default gift image (package logo) if no image/url stored

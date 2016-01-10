@@ -1,35 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
+{% include "navGifts.html" %}
 
-<div class="container">
-  <h1>Welcome Back!</h1>
-  <p>Here is the gift listing for {{recipient.name}}.</p>
-  <p>Click gift name for more information.</p>
-  <p><a href="{{url_for('addGift', rec_id = recipient.id)}}">Add a gift</a></p>
 
-  <div class="row">
-    <div class="col-md-3">
-      <p>Birthday: {{recipient.bday}}</p>
-    </div>
-
-    <div class="col-md-3">
-      <p>Sizes: {{recipient.sizes}}</p>
-    </div>
-
-    <!-- spacer -->
-    <div class="col-md-3"></div>
-
-    <!-- spacer -->
-    <div class="col-md-3"></div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><i>{{recipient.name}}'s Gifts ~ click gift name to see details.</i>
+    <a href="{{url_for('addGift', rec_id = recipient.id)}}" class="btn btn-md btn-success pull-right">Add Gift</a></h4>
   </div>
 
-  <table class="table">
+  <table class="table table-hover">
     <thead>
       <tr>
         <th><!-- image --></th>
         <th>Name</th>
         <th>Status</th>
-        <th>Link</th>
         <th>Tools</th>
       </tr>
     </thead>
@@ -39,15 +24,17 @@
           <td><img src="{{g.image}}" alt="{{g.name}}" style="width:100px;height:100px;"></td>
           <td><a href="{{url_for('giftDetails', rec_id=recipient.id, gift_id=g.id)}}">{{g.name}}</a></td>
           <td>{{g.status}}</td>
-          <td><a href="{{g.link}}" target="_blank">{{g.link}}</a></td>
-          <td><a href="{{url_for('statusGift', rec_id=recipient.id, gift_id=g.id)}}">Change Status</a> ||
-            <a href="{{url_for('editGift', rec_id=recipient.id, gift_id=g.id)}}">Edit</a> ||
-            <a href="{{url_for('regiveGift', gift_id=g.id)}}">Give to another</a> ||
-            <a href="{{url_for('deleteGift', rec_id=recipient.id, gift_id=g.id)}}">Delete</a></td>
+          <td>
+            <div class="btn-group pull-right" role="group" aria-label="...">
+              <a href="{{url_for('statusGift', rec_id=recipient.id, gift_id=g.id)}}" class="btn btn-md btn-info">Change Status</a>
+              <a href="{{url_for('regiveGift', gift_id=g.id)}}" class="btn btn-md btn-info">Give to another</a>
+              <a href="{{url_for('editGift', rec_id=recipient.id, gift_id=g.id)}}" class="btn btn-md btn-info">Edit</a>
+              <a href="{{url_for('deleteGift', rec_id=recipient.id, gift_id=g.id)}}" class="btn btn-md btn-info">Delete</a>
+            </div>
+          </td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
-
 </div>
 {% endblock %}

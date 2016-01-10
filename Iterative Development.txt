@@ -53,5 +53,5 @@ Test after each stage
  a. add files to /static folder
 
 8. Add extra credit
- b. Delete EC - prevent CSRF - WTF forms - https://flask-wtf.readthedocs.org/en/latest/quickstart.html
-
+ a. Delete EC - prevent CSRF - WTF forms - https://flask-wtf.readthedocs.org/en/latest/quickstart.html
+ b. images?
