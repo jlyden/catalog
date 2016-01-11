@@ -22,7 +22,7 @@
         <tr>
           <td>
             {% if g.image %}
-              <img src="{{g.image}}" alt="{{g.name}}" style="width:100px;height:100px;" /></td>
+              <img src="{{g.image}}" alt="{{g.name}}" style="width:100px;height:100px;" />
             {% else %}
               <img src="{{ url_for('static', filename = 'img/present.png')}}" alt="default image" style="width:100px;height:100px;"/>
             {% endif %}

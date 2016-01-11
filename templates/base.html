@@ -31,6 +31,9 @@
         <span><img class="logo" alt="Gifter logo - a present" src="{{url_for('static', filename='img/present.png')}}" /></span>
         <h1 class="script">Gifter</h1>
         <a href="{{url_for('disconnect')}}"><h1 class="script pull-right"><small>Log Out</small></h1></a>
+        {% if 'username' in session %}
+          <img src="{{session['picture']}}" alt="{{session['username']}}" class="userPic pull-right" />
+        {% endif %}
       </div>
 
       {% with messages = get_flashed_messages(with_categories=true) %}

@@ -40,7 +40,6 @@ h1.script {
 }
 
 /* credit to https://css-tricks.com/snippets/css/prevent-long-urls-from-breaking-out-of-container/ */
-
 .noBreakOut {
   /* These are technically the same, but use both */
   overflow-wrap: break-word;
@@ -61,6 +60,15 @@ h1.script {
 
 .script {
   font-family: 'Kaushan Script', cursive;
+}
+
+.userPic {
+  margin: 10px;
+  width: 90px;
+  height: 90px;
+  border-radius: 45px;
+  -webkit-border-radius: 45px;
+  -moz-border-radius: 45px;
 }
 
 .warning {

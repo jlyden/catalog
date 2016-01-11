@@ -514,7 +514,7 @@ def giftDetails(rec_id, gift_id):
         flash('No such gift!', 'alert-warning')
         return redirect(url_for('gifts'))
     return render_template('giftDetails.html',
-                           rec_id=rec_id, gift_id=gift_id, 
+                           rec_id=rec_id, gift_id=gift_id,
                            recipient=thisRecipient, gift=thisGift)
 
 

@@ -13,16 +13,29 @@
     <div class="well">
       <form id="statusGift" action="{{url_for('statusGift', rec_id = rec_id, gift_id = gift_id)}}" method="POST">
         <div class="form-group">
-          <h4><span class="script">Gift</span>: {{gift.name}}</h4>
-          <label for="status">Status</label>
-          <select name="status">
-            <option value="idea">idea</option>
-            <option value="purchased">purchased</option>
-            <option value="given">given</option>
-          </select>
+          <div class="row">
+            <div class="col-md-2">
+                {% if g.image %}
+                  <img src="{{g.image}}" alt="{{g.name}}" style="width:100px;height:100px;" />
+                {% else %}
+                  <img src="{{ url_for('static', filename = 'img/present.png')}}" alt="default image" style="width:100px;height:100px;"/>
+                {% endif %}
+            </div>
+            <div class="col-md-10">
+              <h4><span class="script">Gift</span>: {{gift.name}}</h4>
+              <label for="status">Status</label>
+              <select name="status">
+                <option value="idea">idea</option>
+                <option value="purchased">purchased</option>
+                <option value="given">given</option>
+              </select>
+              <div class="littleSpace">
+                <input type="submit" class="btn btn-md btn-success" value="Change">
+                <a class="btn btn-md btn-danger" onclick="goBack()">Cancel</a>
+              </div>
+            </div>
+          </div>
         </div>
-        <input type="submit" class="btn btn-md btn-success" value="Change">
-        <a class="btn btn-md btn-danger" onclick="goBack()">Cancel</a>
       </form>
     </div>
   </div>
