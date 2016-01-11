@@ -1,7 +1,3 @@
-* check delete gift error
-
-
-
 Google API Key - AIzaSyAQh2khZON9fYLX8FH4GGr91nTkYIYcEu8
 Client ID - 906905857159-19l8lcp90j3utgq2itj4upgdjtjaaltm.apps.googleusercontent.com
 Client secret - n7MWMYbJdZABT-MgomBQjB2X
@@ -13,23 +9,18 @@ storing secrets: https://exploreflask.com/configuration.html
 upload files instead of just storing names - http://flask.pocoo.org/docs/0.10/patterns/fileuploads/
  - https://discussions.udacity.com/t/project-3-images-extra-credit/16568
  - where to store - https://api.imgur.com/
+Amazon - "data-old-hires="http://ecx.images-amazon.com/images/"...
 
 organizing a large app - https://github.com/mitsuhiko/flask/wiki/Large-app-how-to
-
-Amazon - "data-old-hires="http://ecx.images-amazon.com/images/"...
 
 
 TODO -
 * button "logout"
-* all gifts list - back end and front end
-* add link to return to gift list
-* add links (edit, change status) to gift details page
 * add redirect after login
-* add Demo User
 * add 0.0.0.0:5000 as authorized url
-* default gift image (package logo) if no image/url stored
 * create contact form
-* add js(?) hide div to login/registration pages
+
+* add Demo User
 
 Gifter -> www.gifter.com [or something]
 

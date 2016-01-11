@@ -41,7 +41,7 @@
               <nav>
                 <ul class="nav masthead-nav">
                   <li class="active"><a href="{{url_for('welcome')}}">Welcome</a></li>
-<!--                  <li><a href="#">Features</a></li> -->
+                  <!-- <li><a href="#">Features</a></li> -->
                   <li><a href="#">Contact</a></li>
                 </ul>
               </nav>
@@ -51,6 +51,17 @@
           <div id="middle" class="inner cover">
             {% block content %}
             {% endblock %}
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                <div class = "alert">
+                  {% for category, message in messages %}
+                    <p class="{{ category }}">{{ message }}</p>
+                  {% endfor %}
+                </div> <!-- /alert -->
+              {% endif %}
+            {% endwith %}
+
           </div> <!-- middle -->
 
           <div id="bottom" class="mastfoot">

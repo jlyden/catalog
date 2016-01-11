@@ -193,13 +193,9 @@ def gconnect():
 
     # Respond to user
     output = ''
-    output += '<h1>Welcome, '
+    output += '<p>Ciao '
     output += login_session['username']
-    output += '!</h1>'
-    output += '<img src="'
-    output += login_session['picture']
-    output += '" style = "width: 150px; height 150px; border-radius: 75px;'
-    output += ' -webkit-border-radius: 75px; -moz-border-radius: 75px;">'
+    output += '.</p>'
     flash("You are now logged in as %s" % login_session['username'], 'alert-info')
     print "Login complete!"
     return output
@@ -258,13 +254,9 @@ def fbconnect():
 
     # Respond to user
     output = ''
-    output += '<h1>Welcome, '
+    output += '<p>Ciao '
     output += login_session['username']
-    output += '!</h1>'
-    output += '<img src="'
-    output += login_session['picture']
-    output += '" style = "width: 150px; height 150px; border-radius: 75px;'
-    output += ' -webkit-border-radius: 75px; -moz-border-radius: 75px;">'
+    output += '.</p>'
     flash("You are now logged in as %s" % login_session['username'], 'alert-info')
     print "Login complete!"
     return output
@@ -473,11 +465,11 @@ def allGifts():
 
     items = session.query(Gifts).\
                 filter_by(giver_id=login_session['user_id']).\
-                order_by(Gifts.name).all()
+                order_by(Gifts.rec_id   ).all()
     if not items:
         return render_template('giftsNo.html')
     else:
-        return render_template('giftsAll.html')
+        return render_template('giftsAll.html', gifts=items)
 
 
 # Provide gifts list associated with a particular recipient
@@ -522,6 +514,7 @@ def giftDetails(rec_id, gift_id):
         flash('No such gift!', 'alert-warning')
         return redirect(url_for('gifts'))
     return render_template('giftDetails.html',
+                           rec_id=rec_id, gift_id=gift_id, 
                            recipient=thisRecipient, gift=thisGift)
 
 

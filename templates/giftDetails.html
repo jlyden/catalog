@@ -20,11 +20,17 @@
       </thead>
       <tbody>
           <tr>
-            <td><img src="{{gift.image}}" alt="{{gift.name}}" style="width:100px;height:100px;"></td>
+            <td>
+              {% if gift.image %}
+                <img src="{{gift.image}}" alt="{{gift.name}}" style="width:100px;height:100px;" />
+              {% else %}
+                <img src="{{ url_for('static', filename = 'img/present.png')}}" alt="default image" style="width:100px;height:100px;"/>
+              {% endif %}
+            </td>
             <td>{{gift.name}}</td>
             <td>{{gift.status}}</td>
             <td>{{gift.desc}}</br>
-            <a href="{{g.link}}" target="_blank">{{gift.link}}</a></td>
+            <a href="{{g.link}}" class="noBreakOut" target="_blank">{{gift.link}}</a></td>
             <td>{{gift.date_added.strftime("%b %d %Y")}}</td>
             <td>
               {% if gift.date_given %}
@@ -34,6 +40,13 @@
           </tr>
       </tbody>
     </table>
+    <div class="btn-group pull-right" role="group" aria-label="...">
+      <a href="{{url_for('statusGift', rec_id=rec_id, gift_id=gift_id)}}" class="btn btn-md btn-info">Change Status</a>
+      <a href="{{url_for('regiveGift', gift_id=gift_id)}}" class="btn btn-md btn-info">Give to another</a>
+      <a href="{{url_for('editGift', rec_id=rec_id, gift_id=gift_id)}}" class="btn btn-md btn-info">Edit</a>
+      <a href="{{url_for('deleteGift', rec_id=rec_id, gift_id=gift_id)}}" class="btn btn-md btn-info">Delete</a>
+      <a onclick="goBack()" class="btn btn-md btn-success pull-right">Return to Gifts</a>
+    </div>
   </div>
 </div>
 

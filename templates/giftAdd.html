@@ -9,38 +9,39 @@
   </ul>
 </nav>
 
-<div>
-  <h1>Add a gift for {{ recipient.name }}</h1>
-
-  <form id="addGift" action="{{url_for('addGift', rec_id = rec_id)}}" method="POST">
-    <fieldset class="form-group">
-      <label for="name">Name of Gift</label>
-      <input type="text" class="form-control" name="name" placeholder="Plaid Scarf" size='30' required>
-    </fieldset>
-    <fieldset class="form-group">
-      <label for="desc">Description</label>
-      <input type="text" class="form-control" name="desc" placeholder="It's plaid, of course" size='100'>
-    </fieldset>
-    <fieldset class="form-group">
-      <label for="linkBuy">Link to purchase</label>
-      <input type="text" class="form-control" name="linkBuy" placeholder="http://www.amazon.com/blahblahblah" size='100'>
-    </fieldset>
-    <fieldset class="form-group">
-      <label for="linkPic">Link to image</label>
-      <input type="text" class="form-control" name="linkPic" placeholder="http://www.amazon.com/blahblahblah.jpg" size='100'>
-    </fieldset>
-    <fieldset class="form-group">
-      <label for="status">Status</label>
-      <select name="status">
-        <option value="idea">idea</option>
-        <option value="purchased">purchased</option>
-        <option value="given">given</option>
-      </select>
-    </fieldset>
-    <input type="submit" class="btn btn-default" value="Add">
-    <a class="btn btn-default" onclick="goBack()">Cancel</a>
-  </form>
-
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><i>Add gift for {{ recipient.name }}</i></h4>
+  </div>
+  <div class="panel-body">
+    <form id="addGift" action="{{url_for('addGift', rec_id = rec_id)}}" method="POST">
+      <fieldset class="form-group">
+        <label for="name">Name of Gift</label>
+        <input type="text" class="form-control" name="name" placeholder="Plaid Scarf" size='30' required>
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="desc">Description</label>
+        <input type="text" class="form-control" name="desc" placeholder="It's plaid, of course" size='100'>
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="linkBuy">Link to purchase</label>
+        <input type="text" class="form-control" name="linkBuy" placeholder="http://www.amazon.com/blahblahblah" size='100'>
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="linkPic">Link to image</label>
+        <input type="text" class="form-control" name="linkPic" placeholder="http://www.amazon.com/blahblahblah.jpg" size='100'>
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="status">Status</label>
+        <select name="status">
+          <option value="idea">idea</option>
+          <option value="purchased">purchased</option>
+          <option value="given">given</option>
+        </select>
+      </fieldset>
+      <input type="submit" class="btn btn-md btn-success" value="Add">
+      <a class="btn btn-md btn-danger" onclick="goBack()">Cancel</a>
+    </form>
+  </div>
 </div>
-
 {% endblock %}
