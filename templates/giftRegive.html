@@ -30,15 +30,15 @@
       <tbody>
           <tr>
             <td>
-              {% if g.image %}
-                <img src="{{ g.image }}" alt="{{ g.name }}" style="width:100px;height:100px;" />
+              {% if gift.image %}
+                <img src="{{ gift.image }}" alt="{{ gift.name }}" style="width:100px;height:100px;" />
               {% else %}
                 <img src="{{ url_for('static', filename = 'img/present.png') }}" alt="default image" style="width:100px;height:100px;"/>
               {% endif %}
             </td>
             <td>{{ gift.name }}</td>
             <td>{{ gift.status }}</td>
-            <td><a href="{{ g.link }}" class="noBreakOut" target="_blank">{{ gift.link }}</a></td>
+            <td><a href="{{ gift.link }}" class="noBreakOut" target="_blank">{{ gift.link }}</a></td>
           </tr>
       </tbody>
     </table>
