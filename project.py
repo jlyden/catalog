@@ -115,6 +115,12 @@ def welcome():
     return render_template('welcome.html')
 
 
+# Render About page
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+
 # State token to prevent request forgery
 @app.route('/login')
 def showLogin():
