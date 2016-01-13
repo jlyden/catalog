@@ -1,12 +1,7 @@
-* add Demo User *
-
+sudo pip install flask-seasurf
 
 Google API Key - AIzaSyAQh2khZON9fYLX8FH4GGr91nTkYIYcEu8
 Client ID - 906905857159-19l8lcp90j3utgq2itj4upgdjtjaaltm.apps.googleusercontent.com
-
-sudo pip install flask-seasurf
-
-
 Client secret - n7MWMYbJdZABT-MgomBQjB2X
 
 Facebook - appId - 675385429230619

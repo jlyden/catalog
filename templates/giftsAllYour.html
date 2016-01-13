@@ -37,7 +37,7 @@
               <img src="{{ url_for('static', filename = 'img/present.png')}}" alt="default image" style="width:100px;height:100px;"/>
             {% endif %}
           </td>
-          <td>{{g.name}}</td>
+          <td><a href="{{ url_for('giftDetails', rec_id=g.rec_id, gift_id=g.id) }}">{{ g.name }}</a></td>
           <td>{{g.status}}</td>
           <td><a href="{{g.link}}" class="noBreakOut" target="_blank">{{g.link}}</a></td>
           <td><a href="{{url_for('regiveGift', gift_id=g.id)}}" class="btn btn-md btn-info">Give to another</a></td>
