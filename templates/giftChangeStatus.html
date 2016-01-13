@@ -12,11 +12,12 @@
 
     <div class="well">
       <form id="statusGift" action="{{url_for('statusGift', rec_id = rec_id, gift_id = gift_id)}}" method="POST">
+        <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
         <div class="form-group">
           <div class="row">
             <div class="col-md-2">
-                {% if g.image %}
-                  <img src="{{g.image}}" alt="{{g.name}}" style="width:100px;height:100px;" />
+                {% if gift.image %}
+                  <img src="{{gift.image}}" alt="{{gift.name}}" style="width:100px;height:100px;" />
                 {% else %}
                   <img src="{{ url_for('static', filename = 'img/present.png')}}" alt="default image" style="width:100px;height:100px;"/>
                 {% endif %}

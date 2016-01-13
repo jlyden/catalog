@@ -2,9 +2,9 @@
 {% block content %}
 <nav>
   <ul class="nav nav-tabs">
-    <li role="presentation" class="menu"><a href="{{url_for('recipients')}}">Recipients</a></li>
-    <li role="presentation" class="menu"><a href="{{url_for('addRecipient')}}">Add Recipient</a></li>
-    <li role="presentation" class="menu"><a href="{{url_for('allGifts')}}">Gifts</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('recipients') }}">Recipients</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('addRecipient') }}">Add Recipient</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('gifts', rec_id=rec_id )}}">Gifts</a></li>
     <li role="presentation" class="active menu"><a href="#">Add Gift</a></li>
   </ul>
 </nav>
@@ -14,7 +14,8 @@
     <h4><i>Add gift for {{ recipient.name }}</i></h4>
   </div>
   <div class="panel-body">
-    <form id="addGift" action="{{url_for('addGift', rec_id = rec_id)}}" method="POST">
+    <form id="addGift" action="{{ url_for('addGift', rec_id = rec_id) }}" method="POST">
+      <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
       <fieldset class="form-group">
         <label for="name">Name of Gift</label>
         <input type="text" class="form-control" name="name" placeholder="Plaid Scarf" size='30' required>

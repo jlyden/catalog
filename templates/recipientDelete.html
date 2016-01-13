@@ -31,6 +31,7 @@
 
   <div class="littleSpace">
     <form action = "{{url_for('deleteRecipient', rec_id=recipient.id)}}" method = 'POST'>
+    <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
     <input type="submit" class="btn btn-md btn-success" value = "Delete">
     <a class="btn btn-md btn-danger" onclick="goBack()">Cancel</a>
   </div>

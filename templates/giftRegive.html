@@ -35,6 +35,7 @@
     </table>
 
     <form action = "{{url_for('regiveGift', gift_id=gift_id)}}" method = 'POST'>
+    <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
     <fieldset class="form-group">
       <label for="newRecipient">New Recipient</label>
       <select name="newRecipient">

@@ -3,6 +3,9 @@
 
 Google API Key - AIzaSyAQh2khZON9fYLX8FH4GGr91nTkYIYcEu8
 Client ID - 906905857159-19l8lcp90j3utgq2itj4upgdjtjaaltm.apps.googleusercontent.com
+sudo pip install flask-seasurf
+
+
 Client secret - n7MWMYbJdZABT-MgomBQjB2X
 
 Facebook - appId - 675385429230619
@@ -16,6 +19,7 @@ Amazon - "data-old-hires="http://ecx.images-amazon.com/images/"...
 
 organizing a large app - https://github.com/mitsuhiko/flask/wiki/Large-app-how-to
 
+WTF forms - https://flask-wtf.readthedocs.org/en/latest/quickstart.html
 
 TODO -
 * button "logout"

@@ -9,6 +9,7 @@
   <div class="panel-body">
     <p class="warning">Enter only the information you want to change.</p>
     <form id="editGift" action="{{url_for('editGift', rec_id = rec_id, gift_id = gift_id)}}" method="POST">
+      <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
       <fieldset class="form-group">
         <label for="name">Name of Gift</label>
         <input type="text" class="form-control" name="name" placeholder="{{gift.name}}" size='30'>

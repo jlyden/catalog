@@ -2,10 +2,10 @@
 {% block content %}
 <nav>
   <ul class="nav nav-tabs">
-    <li role="presentation" class="menu"><a href="{{url_for('recipients')}}">Recipients</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('recipients') }}">Recipients</a></li>
     <li role="presentation" class="active menu"><a href="#">Add Recipient</a></li>
-    <li role="presentation" class="menu"><a href="{{url_for('allGifts')}}">Gifts</a></li>
-    <li role="presentation" class="menu"><a href="{{url_for('pickRec')}}">Add Gift</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('allGifts') }}">Gifts</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('pickRec') }}">Add Gift</a></li>
   </ul>
 </nav>
 
@@ -14,7 +14,8 @@
     <h4><i>Add recipient</i></h4>
   </div>
   <div class="panel-body">
-    <form id="addRecipient" action="{{url_for('addRecipient')}}" method="POST">
+    <form id="addRecipient" action="{{ url_for('addRecipient') }}" method="POST">
+      <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
       <fieldset class="form-group">
         <label for="name">Name of Recipient</label>
         <input type="text" class="form-control" name="name" placeholder="Jane Doe" size='30' required>
