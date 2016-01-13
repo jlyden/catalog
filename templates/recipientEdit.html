@@ -8,19 +8,19 @@
   </div>
   <div class="panel-body">
     <p class="warning">Enter only the information you want to change.</p>
-    <form id="editRecipient" action="{{url_for('editRecipient', rec_id = rec_id)}}" method="POST">
+    <form id="editRecipient" action="{{ url_for('editRecipient', rec_id = rec_id) }}" method="POST">
       <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
       <fieldset class="form-group">
         <label for="name">Name of Recipient</label>
-        <input type="text" class="form-control" name="name" placeholder="{{recipient.name}}" size='30'>
+        <input type="text" class="form-control" name="name" placeholder="{{ recipient.name }}" size='30'>
       </fieldset>
       <fieldset class="form-group">
         <label for="bday">Birthdate</label>
-        <input type="text" class="form-control" name="bday" placeholder="{{recipient.bday}}" size='20'>
+        <input type="text" class="form-control" name="bday" placeholder="{{ recipient.bday }}" size='20'>
       </fieldset>
       <fieldset class="form-group">
         <label for="sizes">Sizes</label>
-        <input type="text" class="form-control" name="sizes" placeholder="{{recipient.sizes}}" size='20'>
+        <input type="text" class="form-control" name="sizes" placeholder="{{ recipient.sizes }}" size='20'>
       </fieldset>
       <input type="submit" class="btn btn-md btn-success" value="Change">
       <a class="btn btn-md btn-danger" onclick="goBack()">Cancel</a>

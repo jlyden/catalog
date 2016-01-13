@@ -8,23 +8,23 @@
   </div>
   <div class="panel-body">
     <p class="warning">Enter only the information you want to change.</p>
-    <form id="editGift" action="{{url_for('editGift', rec_id = rec_id, gift_id = gift_id)}}" method="POST">
+    <form id="editGift" action="{{ url_for('editGift', rec_id = rec_id, gift_id = gift_id) }}" method="POST">
       <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
       <fieldset class="form-group">
         <label for="name">Name of Gift</label>
-        <input type="text" class="form-control" name="name" placeholder="{{gift.name}}" size='30'>
+        <input type="text" class="form-control" name="name" placeholder="{{ gift.name }}" size='30'>
       </fieldset>
       <fieldset class="form-group">
         <label for="desc">Description</label>
-        <input type="text" class="form-control" name="desc" placeholder="{{gift.desc}}" size='100'>
+        <input type="text" class="form-control" name="desc" placeholder="{{ gift.desc }}" size='100'>
       </fieldset>
       <fieldset class="form-group">
         <label for="linkBuy">Link to purchase</label>
-        <input type="text" class="form-control" name="linkBuy" placeholder="{{gift.link}}" size='100'>
+        <input type="text" class="form-control" name="linkBuy" placeholder="{{ gift.link }}" size='100'>
       </fieldset>
       <fieldset class="form-group">
         <label for="linkPic">Link to image</label>
-        <input type="text" class="form-control" name="linkPic" placeholder="{{gift.image}}" size='100'>
+        <input type="text" class="form-control" name="linkPic" placeholder="{{ gift.image }}" size='100'>
       </fieldset>
       <fieldset class="form-group">
         <label for="status">Status</label>

@@ -11,16 +11,16 @@
     <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
 
     <!-- Bootstrap & jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <link href="{{ url_for('static', filename = 'bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{ url_for('static', filename = 'bootstrap.min.css') }}" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
 
     <!-- Local stylesheet -->
-    <link href="{{ url_for('static', filename = 'styles.css')}}" rel="stylesheet">
+    <link href="{{ url_for('static', filename = 'styles.css') }}" rel="stylesheet">
     <!-- Google Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Kaushan+Script|Poly:400,400italic' rel='stylesheet' type='text/css'>
     <!-- Favicons! -->
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename = 'img/favicon-32x32.png')}}" sizes="32x32" />
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename = 'img/favicon-16x16.png')}}" sizes="16x16" />
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename = 'img/favicon-32x32.png') }}" sizes="32x32" />
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename = 'img/favicon-16x16.png') }}" sizes="16x16" />
 
     <title>Gifter</title>
   </head>
@@ -28,11 +28,11 @@
   <body>
     <div id="top" class="container">
       <div class="page-header">
-        <span><img class="logo" alt="Gifter logo - a present" src="{{url_for('static', filename='img/present.png')}}" /></span>
+        <span><img class="logo" alt="Gifter logo - a present" src="{{ url_for('static', filename='img/present.png') }}" /></span>
         <h1 class="script">Gifter</h1>
-        <a href="{{url_for('disconnect')}}"><h1 class="script pull-right"><small>Log Out</small></h1></a>
+        <a href="{{ url_for('disconnect') }}"><h1 class="script pull-right"><small>Log Out</small></h1></a>
         {% if 'username' in session %}
-          <img src="{{session['picture']}}" alt="{{session['username']}}" class="userPic pull-right" />
+          <img src="{{ session['picture'] }}" alt="{{ session['username'] }}" class="userPic pull-right" />
         {% endif %}
       </div>
 

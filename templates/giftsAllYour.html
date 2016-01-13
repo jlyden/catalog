@@ -5,15 +5,15 @@
   <ul class="nav nav-tabs">
     <li role="presentation" class="menu"><a href="{{ url_for('recipients') }}">Recipients</a></li>
     <li role="presentation" class="menu"><a href="{{ url_for('addRecipient') }}">Add Recipient</a></li>
-    <li role="presentation" class="menu"><a href="{{ url_for('allYourGifts') }}">Gifts</a></li>
+    <li role="presentation" class="active menu"><a href="{{ url_for('allYourGifts') }}">Gifts</a></li>
     <li role="presentation" class="menu"><a href="{{ url_for('pickRec') }}">Add Gift</a></li>
-    <li role="presentation" class="active menu"><a href="#">All Gifts</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('allGifts') }}">All Gifts</a></li>
   </ul>
 </nav>
 
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h4><i>All gifts in database entered by any user</i>
+    <h4><i>All gifts you have entered in database</i>
     <a href="{{ url_for('pickRec') }}" class="btn btn-md btn-success pull-right">Add Gift</a></h4>
   </div>
 
@@ -39,7 +39,7 @@
           </td>
           <td>{{g.name}}</td>
           <td>{{g.status}}</td>
-          <td><a href="{{ g.link }}" class="noBreakOut" target="_blank">{{ g.link }}</a></td>
+          <td><a href="{{g.link}}" class="noBreakOut" target="_blank">{{g.link}}</a></td>
           <td><a href="{{url_for('regiveGift', gift_id=g.id)}}" class="btn btn-md btn-info">Give to another</a></td>
         </tr>
       {% endfor %}

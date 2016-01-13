@@ -45,6 +45,7 @@ def allRecipientsJSON():
     items = session.query(Recipients).order_by(Recipients.id).all()
     return jsonify(AllRecipients=[i.serialize for i in items])
 
+
 # API Endpoint - JSON - all gifts
 @app.route('/gifts/JSON')
 def allGiftsJSON():
@@ -77,7 +78,8 @@ def allRecipientsXML():
         bday.text = i.bday
         sizes = SubElement(thisRecipient, 'sizes')
         sizes.text = i.sizes
-    return app.response_class(tostring(recipientsXML), mimetype='application/xml')
+    return app.response_class(tostring(recipientsXML),
+                              mimetype='application/xml')
 
 
 # API Endpoint - XML - all gifts
@@ -202,7 +204,8 @@ def gconnect():
     output += '<p>Ciao '
     output += login_session['username']
     output += '.</p>'
-    flash("You are now logged in as %s" % login_session['username'], 'alert-info')
+    flash("You are now logged in as %s" % login_session['username'],
+          'alert-info')
     print "Login complete!"
     return output
 
@@ -264,7 +267,8 @@ def fbconnect():
     output += '<p>Ciao '
     output += login_session['username']
     output += '.</p>'
-    flash("You are now logged in as %s" % login_session['username'], 'alert-info')
+    flash("You are now logged in as %s" % login_session['username'],
+          'alert-info')
     print "Login complete!"
     return output
 
@@ -354,6 +358,24 @@ def createGiver(login_session):
     return user_id
 
 
+# "Login" for Demo User
+@app.route('/demoLogin')
+def demoLogin():
+    state = ''.join(random.choice(string.ascii_uppercase +
+                    string.digits) for x in xrange(32))
+    login_session['state'] = state
+
+    login_session['provider'] = 'demo'
+
+    demoUser = session.query(Givers).\
+                filter_by(name="Demo Giver").one()
+    login_session['username'] = demoUser.name
+    login_session['email'] = demoUser.email
+    login_session['picture'] = demoUser.picture
+    login_session['user_id'] = demoUser.id
+    return render_template('demoUser.html')
+
+
 # Provide user's (giver's) recipient list
 @app.route('/recipients')
 def recipients():
@@ -408,7 +430,8 @@ def editRecipient(rec_id):
 
     # Authorization
     if thisRecipient.giver_id != login_session['user_id']:
-        flash('Sorry, you are not authorized to edit this recipient.', 'alert-danger')
+        flash('Sorry, you are not authorized to edit this recipient.',
+              'alert-danger')
         return redirect(url_for('recipients'))
 
     # Update data as provided
@@ -444,7 +467,8 @@ def deleteRecipient(rec_id):
 
     # Authorization
     if thisRecipient.giver_id != login_session['user_id']:
-        flash('Sorry, you are not authorized to delete this recipient.', 'alert-danger')
+        flash('Sorry, you are not authorized to delete this recipient.',
+              'alert-danger')
         return redirect(url_for('recipients'))
 
     # Delete recipient and associated gifts
@@ -462,8 +486,8 @@ def deleteRecipient(rec_id):
                                recipient=thisRecipient)
 
 
-# Provide complete gifts list
-@app.route('/recipients/gifts')
+# Provide complete gifts list in database
+@app.route('/gifts')
 def allGifts():
     # Authorization
     if 'username' not in login_session:
@@ -471,12 +495,28 @@ def allGifts():
         return redirect(url_for('welcome'))
 
     items = session.query(Gifts).\
-                filter_by(giver_id=login_session['user_id']).\
-                order_by(Gifts.rec_id   ).all()
+                order_by(Gifts.id).all()
     if not items:
         return render_template('giftsNo.html')
     else:
         return render_template('giftsAll.html', gifts=items)
+
+
+# Provide complete gifts list associated with a particular giver
+@app.route('/recipients/gifts')
+def allYourGifts():
+    # Authorization
+    if 'username' not in login_session:
+        flash('Sorry, you must login before proceeding.', 'alert-danger')
+        return redirect(url_for('welcome'))
+
+    items = session.query(Gifts).\
+                filter_by(giver_id=login_session['user_id']).\
+                order_by(Gifts.rec_id).all()
+    if not items:
+        return render_template('giftsNoneYour.html')
+    else:
+        return render_template('giftsAllYour.html', gifts=items)
 
 
 # Provide gifts list associated with a particular recipient
@@ -496,10 +536,12 @@ def gifts(rec_id):
                 filter_by(rec_id=rec_id).\
                 order_by(Gifts.name).all()
     if not items:
-        return render_template('giftsNo.html', recipient=thisRecipient)
+        return render_template('giftsNo.html', recipient=thisRecipient,
+                               rec_id=rec_id)
     else:
         return render_template('giftsYes.html',
-                               recipient=thisRecipient, gifts=items)
+                               recipient=thisRecipient, gifts=items,
+                               rec_id=rec_id)
 
 
 # See details about particular gift
@@ -648,7 +690,8 @@ def statusGift(rec_id, gift_id):
 
     # Authorization
     if thisRecipient.giver_id != login_session['user_id']:
-        flash('Sorry, you are not authorized to edit this gift.', 'alert-danger')
+        flash('Sorry, you are not authorized to edit this gift.',
+              'alert-danger')
         return redirect(url_for('recipients'))
 
     # Update status
@@ -683,7 +726,8 @@ def editGift(rec_id, gift_id):
 
     # Authorization
     if thisRecipient.giver_id != login_session['user_id']:
-        flash('Sorry, you are not authorized to edit this gift.', 'alert-danger')
+        flash('Sorry, you are not authorized to edit this gift.',
+              'alert-danger')
         return redirect(url_for('recipients'))
 
     thisGift = session.query(Gifts).\
@@ -726,7 +770,8 @@ def deleteGift(rec_id, gift_id):
 
     # Authorization
     if thisRecipient.giver_id != login_session['user_id']:
-        flash('Sorry, you are not authorized to delete this gift.', 'alert-danger')
+        flash('Sorry, you are not authorized to delete this gift.',
+              'alert-danger')
         return redirect(url_for('recipients'))
 
     thisGift = session.query(Gifts).\

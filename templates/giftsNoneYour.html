@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "navGifts.html" %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><i>You have not entered any gifts for {{ recipient.name }}.</i></h4>
+  </div>
+  <div class="panel-body">
+    <a href="{{ url_for('addGift', rec_id = recipient.id) }}">Add one!</a></h3>
+  </div>
+</div>
+{% endblock %}

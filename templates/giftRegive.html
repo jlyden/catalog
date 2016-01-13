@@ -1,6 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-{% include "navGifts.html" %}
+
+<nav>
+  <ul class="nav nav-tabs">
+    <li role="presentation" class="menu"><a href="{{ url_for('recipients') }}">Recipients</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('addRecipient') }}">Add Recipient</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('allYourGifts') }}">Gifts</a></li>
+    <li role="presentation" class="active menu"><a href="#">Add Gift</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('allGifts') }}">All Gifts</a></li>
+  </ul>
+</nav>
 
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -22,25 +31,25 @@
           <tr>
             <td>
               {% if g.image %}
-                <img src="{{g.image}}" alt="{{g.name}}" style="width:100px;height:100px;" />
+                <img src="{{ g.image }}" alt="{{ g.name }}" style="width:100px;height:100px;" />
               {% else %}
-                <img src="{{ url_for('static', filename = 'img/present.png')}}" alt="default image" style="width:100px;height:100px;"/>
+                <img src="{{ url_for('static', filename = 'img/present.png') }}" alt="default image" style="width:100px;height:100px;"/>
               {% endif %}
             </td>
-            <td>{{gift.name}}</td>
-            <td>{{gift.status}}</td>
-            <td><a href="{{g.link}}" class="noBreakOut" target="_blank">{{gift.link}}</a></td>
+            <td>{{ gift.name }}</td>
+            <td>{{ gift.status }}</td>
+            <td><a href="{{ g.link }}" class="noBreakOut" target="_blank">{{ gift.link }}</a></td>
           </tr>
       </tbody>
     </table>
 
-    <form action = "{{url_for('regiveGift', gift_id=gift_id)}}" method = 'POST'>
+    <form action = "{{ url_for('regiveGift', gift_id=gift_id) }}" method = 'POST'>
     <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
     <fieldset class="form-group">
       <label for="newRecipient">New Recipient</label>
       <select name="newRecipient">
         {% for r in recipients %}
-        <option value="{{r.name}}">{{r.name}}</option>
+        <option value="{{ r.name }}">{{ r.name }}</option>
         {% endfor %}
       </select>
     </fieldset>

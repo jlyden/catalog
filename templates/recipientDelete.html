@@ -22,15 +22,15 @@
     </thead>
     <tbody>
         <tr>
-          <td>{{recipient.name}}</td>
-          <td>{{recipient.bday}}</td>
-          <td>{{recipient.sizes}}</td>
+          <td>{{ recipient.name }}</td>
+          <td>{{ recipient.bday }}</td>
+          <td>{{ recipient.sizes }}</td>
         </tr>
     </tbody>
   </table>
 
   <div class="littleSpace">
-    <form action = "{{url_for('deleteRecipient', rec_id=recipient.id)}}" method = 'POST'>
+    <form action = "{{ url_for('deleteRecipient', rec_id=recipient.id) }}" method = 'POST'>
     <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
     <input type="submit" class="btn btn-md btn-success" value = "Delete">
     <a class="btn btn-md btn-danger" onclick="goBack()">Cancel</a>
