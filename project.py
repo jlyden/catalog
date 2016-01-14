@@ -207,7 +207,7 @@ def gconnect():
 
     # Respond to user
     output = ''
-    output += '<p>Ciao '
+    output += '<p>Ahoy '
     output += login_session['username']
     output += '.</p>'
     flash("You are now logged in as %s" % login_session['username'],
@@ -270,7 +270,7 @@ def fbconnect():
 
     # Respond to user
     output = ''
-    output += '<p>Ciao '
+    output += '<p>Ahoy '
     output += login_session['username']
     output += '.</p>'
     flash("You are now logged in as %s" % login_session['username'],
@@ -542,7 +542,7 @@ def gifts(rec_id):
                 filter_by(rec_id=rec_id).\
                 order_by(Gifts.name).all()
     if not items:
-        return render_template('giftsNo.html', recipient=thisRecipient,
+        return render_template('giftsNoneYour.html', recipient=thisRecipient,
                                rec_id=rec_id)
     else:
         return render_template('giftsYes.html',
@@ -592,8 +592,8 @@ def pickRec():
                             filter_by(giver_id=giver_id).\
                             order_by(Recipients.name).all()
         if not allRecipients:
-            flash('You have no recipients.', 'alert-warning')
-            return redirect(url_for('newRec'))
+            flash('You must have a recipient before you can add a gift.', 'alert-warning')
+            return redirect(url_for('addRecipient'))
         return render_template('recipientPick.html',
                                giver_id=giver_id, recipients=allRecipients)
 

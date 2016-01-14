@@ -19,7 +19,7 @@
     <form id="addGift" action="{{ url_for('addGift', rec_id = rec_id) }}" method="POST">
       <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
       <fieldset class="form-group">
-        <label for="name">Name of Gift</label>
+        <label for="name">Name of Gift - <span class="warning">required</span></label>
         <input type="text" class="form-control" name="name" placeholder="Plaid Scarf" size='30' required>
       </fieldset>
       <fieldset class="form-group">
@@ -28,10 +28,13 @@
       </fieldset>
       <fieldset class="form-group">
         <label for="linkBuy">Link to purchase</label>
+        <p>Hint - Cut and paste from the address-bar on the webpage where you found it.</p>
         <input type="text" class="form-control" name="linkBuy" placeholder="http://www.amazon.com/blahblahblah" size='100'>
       </fieldset>
       <fieldset class="form-group">
         <label for="linkPic">Link to image</label>
+        <p>Hint - "Right click" the image on the webpage where you found the gift, and choose "open image in new tab". Then cut and paste from the address-bar on the image page.</p>
+        <p>If you can't get an image, don't worry. Gifter will show a default picture.</p>
         <input type="text" class="form-control" name="linkPic" placeholder="http://www.amazon.com/blahblahblah.jpg" size='100'>
       </fieldset>
       <fieldset class="form-group">

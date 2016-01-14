@@ -19,7 +19,7 @@
     <form id="addRecipient" action="{{ url_for('addRecipient') }}" method="POST">
       <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
       <fieldset class="form-group">
-        <label for="name">Name of Recipient</label>
+        <label for="name">Name of Recipient - <span class="warning">required</span></label>
         <input type="text" class="form-control" name="name" placeholder="Jane Doe" size='30' required>
       </fieldset>
       <fieldset class="form-group">
