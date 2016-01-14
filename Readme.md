@@ -6,7 +6,7 @@ Maintains lists of Givers; Recipients associated with a particular Giver; and Gi
 ## Required Libraries and Dependencies
 * You will need Python v2 or higher, SQLAlchemy, Flask, oauth2client, xml.etree.ElementTree, and SeaSurf to run this project.
 * You will also need the following Python modules: httplib2, requests, json, and datetime.
-* If you don't already have python on your machine, you could run the system on a Vagrant Virtual Machine. Udacity's instructions for VM installation are here: https://www.udacity.com/wiki/ud197/install-vagrant
+* If you don't already have Python on your machine, you could run the system on a Vagrant Virtual Machine. Udacity's instructions for VM installation are here: https://www.udacity.com/wiki/ud197/install-vagrant
     * If you use the Vagrant VM, you will need to install SeaSurf - `pip install flask-seasurf`
 
 ## Installation
@@ -23,9 +23,9 @@ Download the zip file and extract the "gifter" folder inside.
 From the command line, run `python project.py` Now Gifter is up and running. You can visit it locally at by opening http://localhost:5000 in a web browser.
 
 ### To Test App
-* When you get to the Gifter welcome page, you can "Register" to create a new Gifter account associated with your Google+ or Facebook account. 
+* When you get to the Gifter welcome page, you can "Register" to create a new Gifter account associated with your Google+ or Facebook account.
     * From there, you can create, edit, and delete Recipients and Gifts.
-* Alternately, you could "Explore the Demo." This option logs you in as Demo Giver, which already has Recipients and Gifts associated with it. 
+* Alternately, you could "Explore the Demo." This option logs you in as Demo Giver, which already has Recipients and Gifts associated with it.
     * You can create, edit or delete those demo recipients and gifts as desired.
 * Test authorization for editing and deleting gifts as Demo Giver or from your own account:
     * Click "All Gifts" in the navigation bar. Now you can see all the gifts entered into the database by any user.

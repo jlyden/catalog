@@ -73,6 +73,6 @@ class Gifts(Base):
                 'status': self.status,
         }
 
-engine = create_engine('sqlite:///giftie.db')
+engine = create_engine('sqlite:///gifter.db')
 
 Base.metadata.create_all(engine)

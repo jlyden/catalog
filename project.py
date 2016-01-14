@@ -592,7 +592,8 @@ def pickRec():
                             filter_by(giver_id=giver_id).\
                             order_by(Recipients.name).all()
         if not allRecipients:
-            flash('You must have a recipient before you can add a gift.', 'alert-warning')
+            flash('You must have a recipient before you can add a gift.',
+                  'alert-warning')
             return redirect(url_for('addRecipient'))
         return render_template('recipientPick.html',
                                giver_id=giver_id, recipients=allRecipients)
