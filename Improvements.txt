@@ -24,6 +24,6 @@ ON DELETE CASCADE
 http://docs.sqlalchemy.org/en/rel_0_9/orm/cascades.html
 
 
-3. "It's recommended to use "value" instead "placeholder" to allow the user edit over the actual string value and get a more user-friendly? experience when editing item's properties?."
+3. Use "value" instead "placeholder" in forms - DONE
 
 

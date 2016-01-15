@@ -12,19 +12,19 @@
       <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
       <fieldset class="form-group">
         <label for="name">Name of Gift</label>
-        <input type="text" class="form-control" name="name" placeholder="{{ gift.name }}" size='30'>
+        <input type="text" class="form-control" name="name" value="{{ gift.name }}" size='30'>
       </fieldset>
       <fieldset class="form-group">
         <label for="desc">Description</label>
-        <input type="text" class="form-control" name="desc" placeholder="{{ gift.desc }}" size='100'>
+        <input type="text" class="form-control" name="desc" value="{{ gift.desc }}" size='100'>
       </fieldset>
       <fieldset class="form-group">
         <label for="linkBuy">Link to purchase</label>
-        <input type="text" class="form-control" name="linkBuy" placeholder="{{ gift.link }}" size='100'>
+        <input type="text" class="form-control" name="linkBuy" value="{{ gift.link }}" size='100'>
       </fieldset>
       <fieldset class="form-group">
         <label for="linkPic">Link to image</label>
-        <input type="text" class="form-control" name="linkPic" placeholder="{{ gift.image }}" size='100'>
+        <input type="text" class="form-control" name="linkPic" value="{{ gift.image }}" size='100'>
       </fieldset>
       <fieldset class="form-group">
         <label for="status">Status</label>

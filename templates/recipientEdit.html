@@ -12,15 +12,15 @@
       <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
       <fieldset class="form-group">
         <label for="name">Name of Recipient</label>
-        <input type="text" class="form-control" name="name" placeholder="{{ recipient.name }}" size='30'>
+        <input type="text" class="form-control" name="name" value="{{ recipient.name }}" size='30'>
       </fieldset>
       <fieldset class="form-group">
         <label for="bday">Birthdate</label>
-        <input type="text" class="form-control" name="bday" placeholder="{{ recipient.bday }}" size='20'>
+        <input type="text" class="form-control" name="bday" value="{{ recipient.bday }}" size='20'>
       </fieldset>
       <fieldset class="form-group">
         <label for="sizes">Sizes</label>
-        <input type="text" class="form-control" name="sizes" placeholder="{{ recipient.sizes }}" size='20'>
+        <input type="text" class="form-control" name="sizes" value="{{ recipient.sizes }}" size='20'>
       </fieldset>
       <input type="submit" class="btn btn-md btn-success" value="Change">
       <a class="btn btn-md btn-danger" onclick="goBack()">Cancel</a>
