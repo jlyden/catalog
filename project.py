@@ -19,6 +19,7 @@ import json
 import requests
 import datetime
 from datetime import date
+from functools import wraps
 from gifter_db_setup import Base, Givers, Recipients, Gifts
 
 
@@ -39,26 +40,48 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 
-# API Endpoint - JSON - all recipients
+def login_required(function):
+    """
+    Check login status before continuing with function
+    """
+    @wraps(function)
+    def decorated_function(*args, **kwargs):
+        if 'username' in login_session:
+            return function(*args, **kwargs)
+        else:
+            flash('Sorry, you must login before proceeding.', 'alert-danger')
+            return redirect(url_for('showLogin', next=request.url))
+    return decorated_function
+
+
 @app.route('/recipients/JSON')
 def allRecipientsJSON():
+    """
+    Create JSON list of all recipients, with birthday, rec_id, name and sizes
+    """
     items = session.query(Recipients).order_by(Recipients.id).all()
     return jsonify(AllRecipients=[i.serialize for i in items])
 
 
-# API Endpoint - JSON - all gifts
 @app.route('/gifts/JSON')
 def allGiftsJSON():
+    """
+    Create JSON list of all gifts, with description,
+    gift_id, link, name and status
+    """
     items = session.query(Gifts).order_by(Gifts.id).all()
     return jsonify(AllGifts=[i.serialize for i in items])
 
 
-# API Endpoint - XML - all recipients
-# Help from:
-# https://discussions.udacity.com/t/create-an-additional-api-end-points-in-project-3/27060/3
-# http://stackoverflow.com/questions/29023035/how-to-create-xml-endpoint-in-flask
 @app.route('/recipients/XML')
 def allRecipientsXML():
+    """
+    Create XML list of all recipients, with birthday, rec_id, name and sizes
+
+    .. note:: Helped by these websites -
+        * https://discussions.udacity.com/t/create-an-additional-api-end-points-in-project-3/27060/3
+        * http://stackoverflow.com/questions/29023035/how-to-create-xml-endpoint-in-flask
+    """
     items = session.query(Recipients).order_by(Recipients.id).all()
 
     # Set up XML file
@@ -82,9 +105,12 @@ def allRecipientsXML():
                               mimetype='application/xml')
 
 
-# API Endpoint - XML - all gifts
 @app.route('/gifts/XML')
 def allGiftsXML():
+    """
+    Create XML list of all gifts, with description,
+    gift_id, link, name and status
+    """
     items = session.query(Gifts).order_by(Gifts.id).all()
 
     # Set up XML file
@@ -115,35 +141,45 @@ def welcome():
     return render_template('welcome.html')
 
 
-# Render About page
 @app.route('/about')
 def about():
     return render_template('about.html')
 
 
-# State token to prevent request forgery
 @app.route('/login')
 def showLogin():
+    """
+    Generate state token to prevent request forgery,
+    then direct to login page
+    """
     state = ''.join(random.choice(string.ascii_uppercase +
                     string.digits) for x in xrange(32))
     login_session['state'] = state
     return render_template('login.html', STATE=state)
 
 
-# Separate registration page to clarify that provider login creates account
 @csrf.exempt
 @app.route('/register')
 def showRegister():
+    """
+    Generate state token to prevent request forgery,
+    then direct to login page
+
+    ..note:: Separate from normal login to clarify
+    that logging in with a provider creates local account
+    """
     state = ''.join(random.choice(string.ascii_uppercase +
                     string.digits) for x in xrange(32))
     login_session['state'] = state
     return render_template('register.html')
 
 
-# Google Sign In functions
 @csrf.exempt
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
+    """
+    Log in user through Google+
+    """
     # check state token
     if request.args.get('state') != login_session['state']:
         connectMessage('Invalid state parameter', 401)
@@ -216,10 +252,12 @@ def gconnect():
     return output
 
 
-# Facebook connect
 @csrf.exempt
 @app.route('/fbconnect', methods=['POST'])
 def fbconnect():
+    """
+    Log in user through Facebook
+    """
     # check state token
     if request.args.get('state') != login_session['state']:
         connectMessage('Invalid state parameter', 401)
@@ -279,9 +317,11 @@ def fbconnect():
     return output
 
 
-# Overall disconnect which invokes provider disconnects
 @app.route('/disconnect')
 def disconnect():
+    """
+    General logout/disconnect which invokes provider disconnects
+    """
     if 'provider' in login_session:
         # Call provider disconnect to revoke access token
         if login_session['provider'] == 'google':
@@ -305,9 +345,11 @@ def disconnect():
         return redirect(url_for('welcome'))
 
 
-# Google disconnect - revoke user's token
 @app.route('/gdisconnect')
 def gdisconnect():
+    """
+    Google disconnect - revoke user's token
+    """
     # Only disconnect a connected user
     access_token = login_session.get('credentials')
     if access_token is None:
@@ -323,9 +365,11 @@ def gdisconnect():
         connectMessage('Failed to revoke token for given user.', 400)
 
 
-# Facebook disconnect
 @app.route('/fbdisconnect')
 def fbdisconnect():
+    """
+    Facebook disconnect
+    """
     # Execute HTTP DELETE request to log out user
     facebook_id = login_session['facebook_id']
     url = 'https://graph.facebook.com/%s/permissions' % facebook_id
@@ -334,14 +378,20 @@ def fbdisconnect():
     return "You have been logged out."
 
 
-# Other Helper functions
+# Four Login Helper functions
 def connectMessage(message, code):
-        response = make_response(json.dumps(message), code)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+    """
+    Render responses during log in process
+    """
+    response = make_response(json.dumps(message), code)
+    response.headers['Content-Type'] = 'application/json'
+    return response
 
 
 def getGiverID(email):
+    """
+    Query giver (user) id based on e-mail address
+    """
     try:
         thisGiver = session.query(Givers).filter_by(email=email).first()
         return thisGiver.id
@@ -350,11 +400,17 @@ def getGiverID(email):
 
 
 def getGiverInfo(user_id):
+    """
+    Query giver (user) id based on giver id
+    """
     thisGiver = session.query(Givers).filter_by(id=user_id).first()
     return thisGiver
 
 
 def createGiver(login_session):
+    """
+    Create new giver (user) in database
+    """
     newGiver = Givers(name=login_session['username'],
                       email=login_session['email'],
                       picture=login_session['picture'])
@@ -364,9 +420,11 @@ def createGiver(login_session):
     return user_id
 
 
-# "Login" for Demo User
 @app.route('/demoLogin')
 def demoLogin():
+    """
+    Fake "Login" for Demo User
+    """
     state = ''.join(random.choice(string.ascii_uppercase +
                     string.digits) for x in xrange(32))
     login_session['state'] = state
@@ -382,14 +440,12 @@ def demoLogin():
     return render_template('demoUser.html')
 
 
-# Provide user's (giver's) recipient list
 @app.route('/recipients')
+@login_required
 def recipients():
-    # Authorization
-    if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.', 'alert-danger')
-        return redirect(url_for('welcome'))
-
+    """
+    Query user's (giver's) recipient list
+    """
     items = session.query(Recipients).\
                 filter_by(giver_id=login_session['user_id']).\
                 order_by(Recipients.name).all()
@@ -399,14 +455,12 @@ def recipients():
         return render_template('recipientsYes.html', recipients=items)
 
 
-# Add recipient to database
 @app.route('/recipients/add', methods=['GET', 'POST'])
+@login_required
 def addRecipient():
-    # Authorization
-    if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.', 'alert-danger')
-        return redirect(url_for('welcome'))
-
+    """
+    Create recipient in database
+    """
     if request.method == 'POST':
         newRecipient = Recipients(name=request.form['name'],
                                   bday=request.form['bday'],
@@ -420,14 +474,12 @@ def addRecipient():
         return render_template('recipientAdd.html')
 
 
-# Edit recipient in database
 @app.route('/recipients/<int:rec_id>/edit', methods=['GET', 'POST'])
+@login_required
 def editRecipient(rec_id):
-    # Authorization
-    if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.', 'alert-danger')
-        return redirect(url_for('welcome'))
-
+    """
+    Update recipient in database
+    """
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
     if not thisRecipient:
@@ -457,14 +509,12 @@ def editRecipient(rec_id):
                                recipient=thisRecipient, rec_id=rec_id)
 
 
-# Delete recipient & recipient's gifts from database
 @app.route('/recipients/<int:rec_id>/delete', methods=['GET', 'POST'])
+@login_required
 def deleteRecipient(rec_id):
-    # Authorization
-    if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.', 'alert-danger')
-        return redirect(url_for('welcome'))
-
+    """
+    Delete recipient & associated gifts from database
+    """
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
     if not thisRecipient:
@@ -492,14 +542,12 @@ def deleteRecipient(rec_id):
                                recipient=thisRecipient)
 
 
-# Provide complete gifts list in database
 @app.route('/gifts')
+@login_required
 def allGifts():
-    # Authorization
-    if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.', 'alert-danger')
-        return redirect(url_for('welcome'))
-
+    """
+    Query all gifts in database
+    """
     items = session.query(Gifts).\
                 order_by(Gifts.id).all()
     if not items:
@@ -508,14 +556,12 @@ def allGifts():
         return render_template('giftsAll.html', gifts=items)
 
 
-# Provide complete gifts list associated with a particular giver
 @app.route('/recipients/gifts')
+@login_required
 def allYourGifts():
-    # Authorization
-    if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.', 'alert-danger')
-        return redirect(url_for('welcome'))
-
+    """
+    Query all gifts for logged-in giver (user) from database
+    """
     items = session.query(Gifts).\
                 filter_by(giver_id=login_session['user_id']).\
                 order_by(Gifts.rec_id).all()
@@ -525,14 +571,12 @@ def allYourGifts():
         return render_template('giftsAllYour.html', gifts=items)
 
 
-# Provide gifts list associated with a particular recipient
 @app.route('/recipients/<int:rec_id>/gifts')
+@login_required
 def gifts(rec_id):
-    # Authorization
-    if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.', 'alert-danger')
-        return redirect(url_for('welcome'))
-
+    """
+    Query all gifts for particular recipient from logged-in giver (user)
+    """
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
     if not thisRecipient:
@@ -550,14 +594,12 @@ def gifts(rec_id):
                                rec_id=rec_id)
 
 
-# See details about particular gift
 @app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>')
+@login_required
 def giftDetails(rec_id, gift_id):
-    # Authorization
-    if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.', 'alert-danger')
-        return redirect(url_for('welcome'))
-
+    """
+    Query particular gift and show its details
+    """
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
     if not thisRecipient:
@@ -573,14 +615,12 @@ def giftDetails(rec_id, gift_id):
                            recipient=thisRecipient, gift=thisGift)
 
 
-# Tool to select recipient when adding gift
 @app.route('/recipients/gifts/pick', methods=['GET', 'POST'])
+@login_required
 def pickRec():
-    # Authorization
-    if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.', 'alert-danger')
-        return redirect(url_for('welcome'))
-
+    """
+    Select recipient who will receive gift
+    """
     if request.method == 'POST':
         newRec = session.query(Recipients).\
                         filter_by(name=request.form['newRecipient']).first()
@@ -599,14 +639,12 @@ def pickRec():
                                giver_id=giver_id, recipients=allRecipients)
 
 
-# Add a gift for a particular recipient
 @app.route('/recipients/<int:rec_id>/gifts/add', methods=['GET', 'POST'])
+@login_required
 def addGift(rec_id):
-    # Authorization
-    if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.', 'alert-danger')
-        return redirect(url_for('welcome'))
-
+    """
+    Create gift listing in database associated with a particular recipient
+    """
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
     if not thisRecipient:
@@ -639,14 +677,12 @@ def addGift(rec_id):
                                recipient=thisRecipient, rec_id=rec_id)
 
 
-# Copy an already registered gift to a different recipient
 @app.route('/recipients/gifts/<int:gift_id>/regive', methods=['GET', 'POST'])
+@login_required
 def regiveGift(gift_id):
-    # Authorization
-    if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.', 'alert-danger')
-        return redirect(url_for('welcome'))
-
+    """
+    Copy an already registered gift to a different recipient
+    """
     oldGift = session.query(Gifts).\
                     filter_by(id=gift_id).first()
     if not oldGift:
@@ -683,15 +719,15 @@ def regiveGift(gift_id):
                                recipients=allRecipients)
 
 
-# Update gift's status - separated from other gift updates for user ease
 @app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/status',
            methods=['GET', 'POST'])
+@login_required
 def statusGift(rec_id, gift_id):
-    # Authorization
-    if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.', 'alert-danger')
-        return redirect(url_for('welcome'))
+    """
+    Update status of gift in database
 
+    ..note:: Separated from other gift updates for user ease
+    """
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
 
@@ -719,15 +755,13 @@ def statusGift(rec_id, gift_id):
                                gift_id=gift_id)
 
 
-# Update gift's details in database
 @app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/edit',
            methods=['GET', 'POST'])
+@login_required
 def editGift(rec_id, gift_id):
-    # Authorization
-    if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.', 'alert-danger')
-        return redirect(url_for('welcome'))
-
+    """
+    Update status of gift in database
+    """
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
 
@@ -763,15 +797,13 @@ def editGift(rec_id, gift_id):
                                rec_id=rec_id, gift_id=gift_id)
 
 
-# Delete gift from database
 @app.route('/recipients/<int:rec_id>/gifts/<int:gift_id>/delete',
            methods=['GET', 'POST'])
+@login_required
 def deleteGift(rec_id, gift_id):
-    # Authorization
-    if 'username' not in login_session:
-        flash('Sorry, you must login before proceeding.', 'alert-danger')
-        return redirect(url_for('welcome'))
-
+    """
+    Delete gift from database
+    """
     thisRecipient = session.query(Recipients).\
                         filter_by(id=rec_id).first()
 
