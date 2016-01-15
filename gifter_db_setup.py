@@ -33,6 +33,7 @@ class Recipients(Base):
     sizes = Column(String(30))
     giver_id = Column(Integer, ForeignKey('givers.id'))
     givers = relationship(Givers)
+    gifts = relationship("Gifts", cascade="delete")
 
     # for jsonify
     @property

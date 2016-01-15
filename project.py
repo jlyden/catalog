@@ -530,10 +530,6 @@ def deleteRecipient(rec_id):
 
     # Delete recipient and associated gifts
     if request.method == 'POST':
-        theirGifts = session.query(Gifts).\
-                        filter_by(rec_id=rec_id).all()
-        for g in theirGifts:
-            session.delete(g)
         session.delete(thisRecipient)
         session.commit()
         flash("Recipient and gifts deleted!", 'alert-info')
