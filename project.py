@@ -159,8 +159,8 @@ def showLogin():
     return render_template('login.html', STATE=state)
 
 
-@csrf.exempt
 @app.route('/register')
+@csrf.exempt
 def showRegister():
     """
     Generate state token to prevent request forgery,
@@ -175,8 +175,8 @@ def showRegister():
     return render_template('register.html')
 
 
-@csrf.exempt
 @app.route('/gconnect', methods=['POST'])
+@csrf.exempt
 def gconnect():
     """
     Log in user through Google+
@@ -253,8 +253,8 @@ def gconnect():
     return output
 
 
-@csrf.exempt
 @app.route('/fbconnect', methods=['POST'])
+@csrf.exempt
 def fbconnect():
     """
     Log in user through Facebook
