@@ -19,6 +19,10 @@ Download the zip file and extract the "gifter" folder inside.
 * From the command line, run `python gifter_db_setup.py` to create a database containing three tables: Givers, Recipients and Gifts.
 * Then run `python demo_setup.py` to add Demo Giver with recipients and gifts.
 
+### NOTE: Client Secrets
+* The included "client_secrets.json" and "fb_client_secrets.json" files contain multiple [ENTER YOUR OWN] fields. Replace them before running. 
+
+
 ### To Run
 From the command line, run `python project.py` Now Gifter is up and running. You can visit it locally at by opening http://localhost:5000 in a web browser.
 
