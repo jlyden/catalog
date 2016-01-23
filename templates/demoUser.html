@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<nav>
+  <ul class="nav nav-tabs">
+    <li role="presentation" class="menu"><a href="{{ url_for('recipients') }}">Recipients</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('addRecipient') }}">Add Recipient</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('allYourGifts') }}">Gifts</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('pickRec') }}">Add Gift</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('allGifts') }}">All Gifts</a></li>
+    <li role="presentation" class="menu pull-right"><a href="{{ url_for('about') }}">About</a></li>
+  </ul>
+</nav>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title"><i>You are now "logged in" as Demo Giver.</i></h4>
+  </div>
+  <div class="panel-body">
+    <p>Use the tabs above to explore the system.</p>
+    <p>Recipients and gifts have been added for you to edit and delete as you please.</p>
+  </div>
+</div>
+
+{% endblock %}

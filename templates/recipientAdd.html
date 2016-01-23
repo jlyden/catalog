@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<nav>
+  <ul class="nav nav-tabs">
+    <li role="presentation" class="menu"><a href="{{ url_for('recipients') }}">Recipients</a></li>
+    <li role="presentation" class="active menu"><a href="#">Add Recipient</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('allYourGifts') }}">Gifts</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('pickRec') }}">Add Gift</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('allGifts') }}">All Gifts</a></li>
+    <li role="presentation" class="menu pull-right"><a href="{{ url_for('about') }}">About</a></li>
+  </ul>
+</nav>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><i>Add recipient</i></h4>
+  </div>
+  <div class="panel-body">
+    <form id="addRecipient" action="{{ url_for('addRecipient') }}" method="POST">
+      <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
+      <fieldset class="form-group">
+        <label for="name">Name of Recipient - <span class="warning">required</span></label>
+        <input type="text" class="form-control" name="name" placeholder="Jane Doe" size='30' required>
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="bday">Birthdate</label>
+        <input type="text" class="form-control" name="bday" placeholder="Jan 1" size='20'>
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="sizes">Sizes</label>
+        <input type="text" class="form-control" name="sizes" placeholder="i.e., small or 6" size='20'>
+      </fieldset>
+      <input type="submit" class="btn btn-md btn-success" value="Add">
+      <a class="btn btn-md btn-danger" onclick="goBack()">Cancel</a>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

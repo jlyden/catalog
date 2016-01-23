@@ -1,0 +1,84 @@
+/* local css styles
+ * additional to Bootstrap
+ * authored by jennifer lyden
+ * for Udacity Fullstack Nanodegree */
+
+
+body {
+  margin: 20px;
+  margin-top: 0px;
+  padding: 20px;
+  padding-top: 0px;
+  background-image: url('img/beige.jpg');
+  font-family: 'Poly', serif;
+  font-size: large;
+}
+
+h1.script {
+  font-family: 'Kaushan Script', cursive;
+  display: inline-block;
+}
+
+ul.circle {
+  list-style-type: circle;
+}
+
+.center {
+  text-align: center;
+}
+
+.footer {
+  padding: 10px;
+  text-align: center;
+  font-size: medium;
+  font-family: 'Kaushan Script', cursive;
+}
+
+.littleSpace {
+  padding: 10px;
+}
+
+.logo {
+  height: 100px;
+}
+
+.menu {
+  font-weight: bold;
+  font-size: large;
+}
+
+/* credit to https://css-tricks.com/snippets/css/prevent-long-urls-from-breaking-out-of-container/ */
+.noBreakOut {
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one:
+  word-break: break-word; */
+
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.script {
+  font-family: 'Kaushan Script', cursive;
+}
+
+.userPic {
+  margin: 10px;
+  width: 90px;
+  height: 90px;
+  border-radius: 45px;
+  -webkit-border-radius: 45px;
+  -moz-border-radius: 45px;
+}
+
+.warning {
+  color: red;
+}

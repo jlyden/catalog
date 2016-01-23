@@ -1,0 +1,18 @@
+{% extends "cover.html" %}
+
+{% block top %}
+<h1 class="script" class="masthead-brand">Gifter</h1>
+{% endblock %}
+
+{% block content %}
+<div class="littleSpace">
+  <h1 class="cover-heading script">Gifter - Organize your giving</h1>
+  <p class="lead">Track your gift ideas and purchases in one convenient place.</p>
+</div>
+
+<p class="lead">
+  <a href="{{ url_for('showLogin') }}" class="btn btn-lg btn-default">Login</a>
+  <a href="{{ url_for('showRegister') }}" class="btn btn-lg btn-default">Register</a>
+  <a href="{{ url_for('demoLogin') }}" class="btn btn-lg btn-default">Explore the Demo</a>
+</p>
+{% endblock %}

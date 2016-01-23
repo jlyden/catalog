@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "navRecipients.html" %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><i>You have not entered any recipients.</i></h4>
+  </div>
+  <div class="panel-body">
+    <a href="{{ url_for('addRecipient') }}">Add one!</a>
+  </div>
+</div>
+
+{% endblock %}

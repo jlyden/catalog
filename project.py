@@ -127,8 +127,8 @@ def allGiftsXML():
         thisGift.text = i.name
         gift_ID = SubElement(thisGift, 'gift_ID')
         gift_ID.text = str(i.id)
-        desc = SubElement(thisGift, 'desc')
-        desc.text = i.desc
+        description = SubElement(thisGift, 'description')
+        description.text = i.description
         link = SubElement(thisGift, 'link')
         link.text = i.link
         status = SubElement(thisGift, 'status')
@@ -656,7 +656,7 @@ def addGift(rec_id):
 
     if request.method == 'POST':
         newGift = Gifts(name=request.form['name'],
-                        desc=request.form['desc'],
+                        description=request.form['description'],
                         link=request.form['linkBuy'],
                         image=request.form['linkPic'],
                         status=request.form['status'],
@@ -699,7 +699,7 @@ def regiveGift(gift_id):
         newRec = session.query(Recipients).\
                         filter_by(name=request.form['newRecipient']).first()
         newGift = Gifts(name=oldGift.name,
-                        desc=oldGift.desc,
+                        description=oldGift.description,
                         link=oldGift.link,
                         image=oldGift.image,
                         status="idea",
@@ -775,8 +775,8 @@ def editGift(rec_id, gift_id):
     if request.method == 'POST':
         if request.form['name']:
             thisGift.name = request.form['name']
-        if request.form['desc']:
-            thisGift.desc = request.form['desc']
+        if request.form['description']:
+            thisGift.description = request.form['description']
         if request.form['linkBuy']:
             thisGift.link = request.form['linkBuy']
         if request.form['linkPic']:

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<nav>
+  <ul class="nav nav-tabs">
+    <li role="presentation" class="menu"><a href="{{ url_for('recipients') }}">Recipients</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('addRecipient') }}">Add Recipient</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('allYourGifts') }}">Gifts</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('pickRec') }}">Add Gift</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('allGifts') }}">All Gifts</a></li>
+    <li role="presentation" class="active menu pull-right"><a href="{{ url_for('about') }}">About</a></li>
+  </ul>
+</nav>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><i>About Gifter</i></h4>
+  </div>
+  <div class="panel-body">
+    <p>Gifter lets you track your gift ideas and purchases in one convenient place.</p>
+
+    <div class="well">
+      <ul class="circle">
+        <li>Multiple users ("givers") can maintain separate, private lists of recipients and associated gifts.</li>
+        <li>Create, edit and delete recipients and gifts with ease.</li>
+        <li>Get gift ideas from other "givers" - you won't know who the original giver or recipient was, but you can "re-give" the gift to one of your recipients.</li>
+        <li>Set and change your gift's "status" - is it an "idea", something you have "purchased", or something you have "given"? Gifter maintains records of when you added the gift to the system, and when you changed its status to "given."</li>
+      </ul>
+    </div>
+
+    <p class="script center">Never lose track of your gifts and ideas again!</p>
+
+    <div class="well">
+      <p>Created by jennifer lyden to fulfill Project Three for the FullStack Nanodegree.</br>
+        Code available at GitHub - search <a href="https://github.com/jlyden" target="_blank">jlyden</a>.</p>
+    </div>
+  </div>
+</div>
+
+{% endblock%}

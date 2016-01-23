@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<nav>
+  <ul class="nav nav-tabs">
+    <li role="presentation" class="menu"><a href="{{ url_for('recipients') }}">Recipients</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('addRecipient') }}">Add Recipient</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('allGifts') }}">Gifts</a></li>
+    <li role="presentation" class="active menu"><a href="#">Add Gift</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('allGifts') }}">All Gifts</a></li>
+    <li role="presentation" class="menu pull-right"><a href="{{ url_for('about') }}">About</a></li>
+  </ul>
+</nav>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><i>Select recipient for your new gift</i></h4>
+  </div>
+  <div class="panel-body">
+    <form action = "{{ url_for('pickRec') }}" method = 'POST'>
+    <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
+    <fieldset class="form-group">
+      <label for="newRecipient">New Recipient</label>
+      <select name="newRecipient">
+        {% for r in recipients %}
+        <option value="{{ r.name }}">{{ r.name }}</option>
+        {% endfor %}
+      </select>
+    </fieldset>
+    <input type="submit" class="btn btn-md btn-success" value = "Go">
+    <a class="btn btn-md btn-danger" onclick="goBack()">Cancel</a>
+  </div>
+</div>
+{% endblock %}

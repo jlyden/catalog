@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "navGifts.html" %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><i>Details for {{ recipient.name }}'s {{ gift.name }}</i></h4>
+  </div>
+  <div class="panel-body">
+    <table class="table">
+      <thead>
+        <tr>
+          <th><!-- image --></th>
+          <th>Name</th>
+          <th>Status</th>
+          <th>Description</th>
+          <th>Date Added</th>
+          <th>Date Given</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr>
+            <td>
+              {% if gift.image %}
+                <img src="{{ gift.image }}" alt="{{ gift.name }}" style="width:100px;height:100px;" />
+              {% else %}
+                <img src="{{ url_for('static', filename = 'img/present.png') }}" alt="default image" style="width:100px;height:100px;"/>
+              {% endif %}
+            </td>
+            <td>{{ gift.name }}</td>
+            <td>{{ gift.status }}</td>
+            <td>{{ gift.description }}</br>
+            <a href="{{ gift.link }}" class="noBreakOut" target="_blank">{{ gift.link }}</a></td>
+            <td>{{ gift.date_added.strftime("%b %d %Y") }}</td>
+            <td>
+              {% if gift.date_given %}
+                {{ gift.date_given.strftime("%b %d %Y") }}
+              {% endif %}
+            </td>
+          </tr>
+      </tbody>
+    </table>
+    <div class="btn-group pull-right" role="group" aria-label="...">
+      <a href="{{ url_for('statusGift', rec_id=rec_id, gift_id=gift_id) }}" class="btn btn-md btn-info">Change Status</a>
+      <a href="{{ url_for('regiveGift', gift_id=gift_id) }}" class="btn btn-md btn-info">Give to another</a>
+      <a href="{{ url_for('editGift', rec_id=rec_id, gift_id=gift_id) }}" class="btn btn-md btn-info">Edit</a>
+      <a href="{{ url_for('deleteGift', rec_id=rec_id, gift_id=gift_id) }}" class="btn btn-md btn-info">Delete</a>
+      <a onclick="goBack()" class="btn btn-md btn-success pull-right">Return to Gifts</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

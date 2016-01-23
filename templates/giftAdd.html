@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<nav>
+  <ul class="nav nav-tabs">
+    <li role="presentation" class="menu"><a href="{{ url_for('recipients') }}">Recipients</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('addRecipient') }}">Add Recipient</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('gifts', rec_id=rec_id )}}">Gifts</a></li>
+    <li role="presentation" class="active menu"><a href="#">Add Gift</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('allGifts') }}">All Gifts</a></li>
+    <li role="presentation" class="menu pull-right"><a href="{{ url_for('about') }}">About</a></li>
+  </ul>
+</nav>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><i>Add gift for {{ recipient.name }}</i></h4>
+  </div>
+  <div class="panel-body">
+    <form id="addGift" action="{{ url_for('addGift', rec_id = rec_id) }}" method="POST">
+      <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
+      <fieldset class="form-group">
+        <label for="name">Name of Gift - <span class="warning">required</span></label>
+        <input type="text" class="form-control" name="name" placeholder="Plaid Scarf" size='30' required>
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="description">Description</label>
+        <input type="text" class="form-control" name="description" placeholder="It's plaid, of course" size='100'>
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="linkBuy">Link to purchase</label>
+        <p>Hint - Cut and paste from the address-bar on the webpage where you found it.</p>
+        <input type="text" class="form-control" name="linkBuy" placeholder="http://www.amazon.com/blahblahblah" size='100'>
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="linkPic">Link to image</label>
+        <p>Hint - "Right click" the image on the webpage where you found the gift, and choose "open image in new tab". Then cut and paste from the address-bar on the image page.</p>
+        <p>If you can't get an image, don't worry. Gifter will show a default picture.</p>
+        <input type="text" class="form-control" name="linkPic" placeholder="http://www.amazon.com/blahblahblah.jpg" size='100'>
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="status">Status</label>
+        <select name="status">
+          <option value="idea">idea</option>
+          <option value="purchased">purchased</option>
+          <option value="given">given</option>
+        </select>
+      </fieldset>
+      <input type="submit" class="btn btn-md btn-success" value="Add">
+      <a class="btn btn-md btn-danger" onclick="goBack()">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

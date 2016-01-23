@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "navGifts.html" %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><i>Delete Gift</i></h4>
+  </div>
+  <div class="panel-body">
+    <p class="warning">Are you sure you want to delete this gift?</p>
+    <p><strong>This action cannot be undone!</strong></p>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th><!-- image --></th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Link</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+            {% if gift.image %}
+              <img src="{{ gift.image }}" alt="{{ gift.name }}" style="width:100px;height:100px;" />
+            {% else %}
+              <img src="{{ url_for('static', filename = 'img/present.png') }}" alt="default image" style="width:100px;height:100px;"/>
+            {% endif %}
+          </td>
+          <td>{{ gift.name }}</td>
+          <td>{{ gift.status }}</td>
+          <td><a href="{{ gift.link }}" class="noBreakOut" target="_blank">{{ gift.link }}</a></td>
+        </tr>
+    </tbody>
+  </table>
+
+  <div class="littleSpace">
+    <form action = "{{url_for('deleteGift', gift_id=gift_id, rec_id=rec_id) }}" method = 'POST'>
+    <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
+    <input type="submit" class="btn btn-md btn-success" value = "Delete">
+    <a class="btn btn-md btn-danger" onclick="goBack()">Cancel</a>
+  </div>
+
+</div>
+{% endblock %}

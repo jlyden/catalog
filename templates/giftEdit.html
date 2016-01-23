@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "navGifts.html" %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><i>Edit Gift</i></h4>
+  </div>
+  <div class="panel-body">
+    <p class="warning">Enter only the information you want to change.</p>
+    <form id="editGift" action="{{ url_for('editGift', rec_id = rec_id, gift_id = gift_id) }}" method="POST">
+      <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
+      <fieldset class="form-group">
+        <label for="name">Name of Gift</label>
+        <input type="text" class="form-control" name="name" value="{{ gift.name }}" size='30'>
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="description">Description</label>
+        <input type="text" class="form-control" name="description" value="{{ gift.desc }}" size='100'>
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="linkBuy">Link to purchase</label>
+        <input type="text" class="form-control" name="linkBuy" value="{{ gift.link }}" size='100'>
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="linkPic">Link to image</label>
+        <input type="text" class="form-control" name="linkPic" value="{{ gift.image }}" size='100'>
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="status">Status</label>
+        <select name="status">
+          <option value="idea">idea</option>
+          <option value="purchased">purchased</option>
+          <option value="given">given</option>
+        </select>
+      </fieldset>
+      <input type="submit" class="btn btn-md btn-success" value="Change">
+      <a class="btn btn-md btn-danger" onclick="goBack()">Cancel</a>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

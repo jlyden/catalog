@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+
+<nav>
+  <ul class="nav nav-tabs">
+    <li role="presentation" class="menu"><a href="{{ url_for('recipients') }}">Recipients</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('addRecipient') }}">Add Recipient</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('allYourGifts') }}">Gifts</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('pickRec') }}">Add Gift</a></li>
+    <li role="presentation" class="active menu"><a href="#">All Gifts</a></li>
+    <li role="presentation" class="menu pull-right"><a href="{{ url_for('about') }}">About</a></li>
+  </ul>
+</nav>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><i>There are no gifts in the system.</i></h4>
+  </div>
+  <div class="panel-body">
+    <a href="{{ url_for('pickRec') }}">Add one!</a></h3>
+  </div>
+</div>
+{% endblock %}

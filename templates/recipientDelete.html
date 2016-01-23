@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "navRecipients.html" %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><i>Delete recipient</i></h4>
+  </div>
+  <div class="panel-body">
+    <p class="warning">Are you sure you want to delete this recipient?</p>
+    <p>Deleting a recipient ALSO deletes all gifts associated with that recipient.
+       <strong>This action cannot be undone!</strong></p>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Birthday</th>
+        <th>Sizes</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>{{ recipient.name }}</td>
+          <td>{{ recipient.bday }}</td>
+          <td>{{ recipient.sizes }}</td>
+        </tr>
+    </tbody>
+  </table>
+
+  <div class="littleSpace">
+    <form action = "{{ url_for('deleteRecipient', rec_id=recipient.id) }}" method = 'POST'>
+    <input name="_csrf_token" type=hidden value="{{ csrf_token() }}">
+    <input type="submit" class="btn btn-md btn-success" value = "Delete">
+    <a class="btn btn-md btn-danger" onclick="goBack()">Cancel</a>
+  </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+
+<nav>
+  <ul class="nav nav-tabs">
+    <li role="presentation" class="menu"><a href="{{ url_for('recipients') }}">Recipients</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('addRecipient') }}">Add Recipient</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('allYourGifts') }}">Gifts</a></li>
+    <li role="presentation" class="menu"><a href="{{ url_for('pickRec') }}">Add Gift</a></li>
+    <li role="presentation" class="active menu"><a href="#">All Gifts</a></li>
+    <li role="presentation" class="menu pull-right"><a href="{{ url_for('about') }}">About</a></li>
+  </ul>
+</nav>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><i>All gifts in database entered by any user ~ click gift name to see details.</i>
+    <a href="{{ url_for('pickRec') }}" class="btn btn-md btn-success pull-right">Add Gift</a></h4>
+    <h4>Gifts will appear multiple times if they have been listed for multiple recipients.</h4>
+  </div>
+
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th><!-- image --></th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Link</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for g in gifts %}
+        <tr>
+          <td>
+            {% if g.image %}
+              <img src="{{g.image}}" alt="{{g.name}}" style="width:100px;height:100px;" />
+            {% else %}
+              <img src="{{ url_for('static', filename = 'img/present.png')}}" alt="default image" style="width:100px;height:100px;"/>
+            {% endif %}
+          </td>
+          <td><a href="{{ url_for('giftDetails', rec_id=g.rec_id, gift_id=g.id) }}">{{ g.name }}</a></td>
+          <td>{{g.status}}</td>
+          <td><a href="{{ g.link }}" class="noBreakOut" target="_blank">{{ g.link }}</a></td>
+          <td><a href="{{url_for('regiveGift', gift_id=g.id)}}" class="btn btn-md btn-info">Give to another</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
