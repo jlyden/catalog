@@ -1,0 +1,12 @@
+Changes to catalog to move it from SQLite to PostgreSQL
+* Make sure psycopg2 installed 
+* Create new database set-up file (gifter.sql)
+* Create database: `psql`, `CREATE DATABASE gifter`
+* Import tables: `\c gifter`, `\i gifter.sql`
+* Edit demo_setup.py -> add `install psycopg2`, change `create_engine` target
+
+
+
+TO DO
+- Fix JSONify
+
