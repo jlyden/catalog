@@ -20,7 +20,7 @@ import requests
 import datetime
 from datetime import date
 from functools import wraps
-from gifter_db_setup import Base, Givers, Recipients, Gifts
+from models import Base, Givers, Recipients, Gifts
 
 
 app = Flask(__name__)
