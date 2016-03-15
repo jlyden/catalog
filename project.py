@@ -831,4 +831,4 @@ def deleteGift(rec_id, gift_id):
 if __name__ == '__main__':
     app.secret_key = 'sha7b0t_4eY'
     app.debug = False
-    app.run(host='0.0.0.0', port=5000)
+    app.run()
