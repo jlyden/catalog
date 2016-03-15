@@ -1,4 +1,4 @@
-# Models for Gifter Web App
+# Database setup for Gifter Web App
 # written by jennifer lyden for Udacity FullStack Nanodegree
 
 import os
