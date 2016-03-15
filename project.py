@@ -25,7 +25,6 @@ from gifter_db_setup import Base, Givers, Recipients, Gifts
 
 
 app = Flask(__name__)
-app.config.from_object('config')
 
 # For CSRF protection, from https://flask-seasurf.readthedocs.org/en/latest/
 csrf = SeaSurf(app)
@@ -831,5 +830,5 @@ def deleteGift(rec_id, gift_id):
 
 if __name__ == '__main__':
     app.secret_key = 'sha7b0t_4eY'
-    app.debug = app.config["DEBUG"]
+    app.debug = False
     app.run(host='0.0.0.0', port=5000)
