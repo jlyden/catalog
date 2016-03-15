@@ -194,7 +194,7 @@ def gconnect():
 
     # Upgrade auth code into credentials object
     try:
-        oauth_flow = flow_from_clientsecrets('/var/www/Gifter/Gifter/client_secrets', scope='')
+        oauth_flow = flow_from_clientsecrets('/var/www/Gifter/Gifter/client_secrets.json', scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
@@ -272,9 +272,9 @@ def fbconnect():
 
     # Exchange client token for long-lived server-side token
     app_id = json.loads(
-             open('/var/www/Gifter/Gifter/fb_client_secrets', 'r').read())['web']['app_id']
+             open('/var/www/Gifter/Gifter/fb_client_secrets.json', 'r').read())['web']['app_id']
     app_secret = json.loads(
-             open('/var/www/Gifter/Gifter/fb_client_secrets', 'r').read())['web']['app_secret']
+             open('/var/www/Gifter/Gifter/fb_client_secrets.json', 'r').read())['web']['app_secret']
     url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' % (app_id, app_secret, access_token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
