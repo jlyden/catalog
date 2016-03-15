@@ -31,13 +31,13 @@ app = Flask(__name__)
 csrf = SeaSurf(app)
 
 # Solving relative path issues
-#here = os.path.dirname(os.path.abspath(__file__))
-#client_secrets = os.path.join(here, 'client_secrets.json')
-#fb_client_secrets = os.path.join(here, 'fb_client_secrets.json')
+here = os.path.dirname(__file__)
+client_secrets = os.path.join(here, 'client_secrets.json')
+fb_client_secrets = os.path.join(here, 'fb_client_secrets.json')
 
 # For Google authentication
 CLIENT_ID = json.loads(
-            open('/var/www/Gifter/Gifter/client_secrets.json', 'r').read())['web']['client_id']
+            open('client_secrets', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Gifter"
 
 # Database connection setup
@@ -194,7 +194,7 @@ def gconnect():
 
     # Upgrade auth code into credentials object
     try:
-        oauth_flow = flow_from_clientsecrets('/var/www/Gifter/Gifter/client_secrets.json', scope='')
+        oauth_flow = flow_from_clientsecrets('client_secrets', scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
@@ -272,9 +272,9 @@ def fbconnect():
 
     # Exchange client token for long-lived server-side token
     app_id = json.loads(
-             open('/var/www/Gifter/Gifter/fb_client_secrets.json', 'r').read())['web']['app_id']
+             open('fb_client_secrets', 'r').read())['web']['app_id']
     app_secret = json.loads(
-             open('/var/www/Gifter/Gifter/fb_client_secrets.json', 'r').read())['web']['app_secret']
+             open('fb_client_secrets', 'r').read())['web']['app_secret']
     url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' % (app_id, app_secret, access_token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
