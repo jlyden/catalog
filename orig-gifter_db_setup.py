@@ -74,6 +74,6 @@ class Gifts(Base):
                 'status': self.status,
         }
 
-engine = create_engine('postgresql+psycopg2://catalog:catalog@localhost/catalog')
+engine = create_engine('sqlite:///gifter.db')
 
 Base.metadata.create_all(engine)
