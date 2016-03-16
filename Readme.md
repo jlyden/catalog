@@ -71,6 +71,7 @@
    * Install inside virtualenv: **Flask**, **flask-seasurf**, **SQLAlchemy**, **oauth2client**
         * I read that `sudo pip` inside virtualenv is bad form, but when I omitted `sudo` exceptions were thrown
    * Deactivate virtualenv
+
 #### Tweak App to run in this environment
 1. In `__init__.py`, `gifter_db_setup.py`, `demo_setup.py` ... 
     * add `import psycopg2`
