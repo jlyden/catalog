@@ -8,11 +8,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import datetime
-import psycopg2
 from gifter_db_setup import Base, Givers, Recipients, Gifts
 
 # Database connection setup
-engine = create_engine('postgresql+psycopg2://catalog:catalog@localhost/catalog')
+engine = create_engine('sqlite:///gifter.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()

@@ -17,7 +17,6 @@ import random
 import string
 import httplib2
 import json
-import psycopg2
 import requests
 import datetime
 from datetime import date
@@ -41,7 +40,7 @@ CLIENT_ID = json.loads(
 APPLICATION_NAME = "Gifter"
 
 # Database connection setup
-engine = create_engine('postgresql+psycopg2://catalog:catalog@localhost/catalog')
+engine = create_engine('sqlite:///gifter.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
@@ -831,5 +830,5 @@ def deleteGift(rec_id, gift_id):
 
 if __name__ == '__main__':
     app.secret_key = 'sha7b0t_4eY'
-    app.debug = True
+    app.debug = False
     app.run()
