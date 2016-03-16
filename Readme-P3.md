@@ -3,8 +3,8 @@
 ## Synopsis
 * Maintains lists of Givers; Recipients associated with a particular Giver; and Gifts, associated with a particular Giver and Recipient, classified as idea, purchased, or given, with images and links.
 
-## Readme-P3 vs Readme-P5
-* These instructions explain how to install and deploy the app on your own machine. If you need detailed server-setup instructions (for example, to deploy app on an Amazon AWS instance), see Readme-P5 for detailed instructions.
+## Readme-P3 vs Readme
+* These instructions explain how to install and deploy the app on your own machine. If you need detailed server-setup instructions (for example, to deploy app on an Amazon AWS instance), see (other) Readme for detailed instructions.
 
 ## Required Libraries and Dependencies
 * This is the sqlite version of this app developed for P3 of Udacity's Full Stack NanoDegree program

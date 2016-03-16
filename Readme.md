@@ -3,7 +3,7 @@
 ## Synopsis
 * Maintains lists of Givers; Recipients associated with a particular Giver; and Gifts, associated with a particular Giver and Recipient, classified as idea, purchased, or given, with images and links.
 
-### Readme-P5 vs Readme-P3
+### Readme vs Readme-P3
 * These instructions explain how to set up a server on Amazon AWS and then deploy the app on that server. If you don't need to set-up a server, see Readme-P3 for streamlined instructions.
 
 ### Accessing the Deployed App
@@ -11,7 +11,7 @@
 - SSH port: 2200
 - URL: http://ec2-52-37-189-129.us-west-2.compute.amazonaws.com
 
-### Software Installed & Configuration Changes
+## Software Installed & Configuration Changes
 #### Users:
 1. Login as *root*, add two users, *grader* and *jenny*, and set passwords for each.
 2. Add files in `/etc/sudoers.d` for *grader* and *jenny* to give them `sudo` power with password; adjust file permissions
@@ -48,7 +48,7 @@
         * `GRANT ALL ON SCHEMA public TO catalog;`
    * Exit database and logout of postgres
 
-#### Flask Setup and App Installation
+#### Setup Flask and other dependencies and Clone App
 1. Create and move to FlaskApp Directory: `sudo mkdir /var/www/Gifter`, `cd /var/www/Gifter`
 2. Install **git** and clone repo from github: `sudo git clone https://github.com/jlyden/catalog.git`
    * App arrives in "catalog" folder, so renaming needed
@@ -71,25 +71,26 @@
    * Install inside virtualenv: **Flask**, **flask-seasurf**, **SQLAlchemy**, **oauth2client**
         * I read that `sudo pip` inside virtualenv is bad form, but when I omitted `sudo` exceptions were thrown
    * Deactivate virtualenv
-6. Edit to get app up and running with postgres
-   * In `__init__.py`, `gifter_db_setup.py`, `demo_setup.py` ... 
-        * add `import psycopg2`
-        * change ConnectString to `postgresql+psycopg2://catalog:catalog@localhost/catalog`
-   * Setup Database & Demo Data
-        * `python gifter_db_setup.py`; `python demo_setup.py`
-7. Update *catalog* user permissions on postgres database tables
+#### Tweak App to run in this environment
+1. In `__init__.py`, `gifter_db_setup.py`, `demo_setup.py` ... 
+    * add `import psycopg2`
+    * change ConnectString to `postgresql+psycopg2://catalog:catalog@localhost/catalog`
+2. Setup Database & Demo Data
+    * `python gifter_db_setup.py`
+    * `python demo_setup.py`
+3. Update *catalog* user permissions on postgres database tables
    * Login to postgresql - `sudo -i -u postgres`
    * Connect to catalog & see tables - `psql -d catalog` & `\d`
    * `GRANT INSERT, SELECT, UPDATE, DELETE ON gifts, givers, recipients TO catalog;` 
    * Verify permissions - `\z` and exit - `\q`; `logout`
-8. Oauth Updates - Google
+4. Oauth Updates - Google
    * Google Developers Console -> Enable and manage APIs -> Credentials -> Gifter App under "OAuth 2.0 client IDs" -> Add public address (http://ec2-52-37-189-129.us-west-2.compute.amazonaws.com) under "Authorized JavaScript origins" and "Authorized redirect URIs" (with /oauth2callback)
    * Download JSON and paste into `/var/www/Gifter/Gifter/client_secrets.json`
    * Back to Credentials -> Gifter key under "API keys" -> Add public address (http://ec2-52-37-189-129.us-west-2.compute.amazonaws.com) under "Accept requests from these ..."
-9. Oauth Updates - Facebook
+5. Oauth Updates - Facebook
    *  Facebook Developers Console -> Settings -> Change Site URL [Save Changes] -> Advanced -> Add public address to "Valid OAuth redirect URIs" [Save Changes] -> Basic
    * Copy App ID & App Secret and paste into `/var/www/Gifter/Gifter/fb_client_secrets.json`
-10. Reload Apache: `sudo service apache2 reload` and visit website to confirm it's working!
+6. Reload Apache: `sudo service apache2 reload` and visit website to confirm it's working!
     * If not immediately working, disable Apache's default VirtualHost and restart Apache: `sudo a2dissite default`
     * If needed, view Apache logs to troubleshoot: `sudo tail /var/log/apache2/error.log`
 
@@ -132,7 +133,7 @@
 * Automatic Updates (Ubuntu recommendation): https://help.ubuntu.com/12.04/serverguide/automatic-updates.html
 * Glances (monitor server resources): http://glances.readthedocs.org/en/latest/glances-doc.html
 
-### To Test App
+## To Test App
 * When you get to the Gifter welcome page, you can "Register" to create a new Gifter account associated with your Google+ or Facebook account.
     * From there, you can create, edit, and delete Recipients and Gifts.
 * Alternately, you could "Explore the Demo." This option logs you in as Demo Giver, which already has Recipients and Gifts associated with it.
