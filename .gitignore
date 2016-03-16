@@ -1,6 +1,4 @@
-*.json
-*.pyc
 .vagrant/
 Vagrantfile
-old-Vagrantfile
-fromGitHub/
+odd-files/
+*.pyc
