@@ -17,6 +17,7 @@ import random
 import string
 import httplib2
 import json
+import psycopg2
 import requests
 import datetime
 from datetime import date
@@ -25,12 +26,11 @@ from gifter_db_setup import Base, Givers, Recipients, Gifts
 
 
 app = Flask(__name__)
-#app.config.from_object('config')
 
 # For CSRF protection, from https://flask-seasurf.readthedocs.org/en/latest/
 csrf = SeaSurf(app)
 
-# Solving relative path issues
+# To avoid relative path issues
 here = os.path.dirname(__file__)
 client_secrets = os.path.join(here, 'client_secrets.json')
 fb_client_secrets = os.path.join(here, 'fb_client_secrets.json')
