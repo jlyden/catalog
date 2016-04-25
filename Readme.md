@@ -2,6 +2,7 @@
 
 ## Synopsis
 * Maintains lists of Givers; Recipients associated with a particular Giver; and Gifts, associated with a particular Giver and Recipient, classified as idea, purchased, or given, with images and links.
+* Developed from scratch 
 
 ### Readme vs Readme-P3
 * These instructions explain how to set up a server on Amazon AWS and then deploy the app on that server. If you don't need to set-up a server, see Readme-P3 for streamlined instructions.
